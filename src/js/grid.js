@@ -128,6 +128,7 @@ class Grid {
             case DIRECTIONS.horizontal:
                 this.#direction = DIRECTIONS.vertical;
                 break;
+                
             case DIRECTIONS.vertical:
                 this.#direction = DIRECTIONS.horizontal;
                 break;
@@ -182,12 +183,9 @@ class Grid {
 
         this.disableKeys();
 
-        
-
         this.#currentCell = this.#cells[j][i];
 
         this.enableKeys();
-
 
     }
 

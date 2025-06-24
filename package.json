@@ -1,0 +1,19 @@
+{
+  "name": "squaredle",
+  "version": "1.0.0",
+  "description": "5x5 crossword using only valid Wordle words",
+  "keywords": [
+    "crossword",
+    "wordle"
+  ],
+  "license": "ISC",
+  "author": "Dco Codes",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "dependencies": {
+    "express": "^5.1.0"
+  }
+}

@@ -147,10 +147,12 @@ class Grid {
     }
 
     selectCell( i, j ) {
+        const cell = this.#cells[j][i];
+        if (cell.correct) return;
 
         this.disableKeys();
 
-        this.#currentCell = this.#cells[j][i];
+        this.#currentCell = cell;
 
         this.enableKeys();
 

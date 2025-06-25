@@ -95,6 +95,10 @@ class Grid {
 
     }
 
+    get size() {
+        return this.#size;
+    }
+
     get currentCell() {
         return this.#currentCell;
     }
@@ -197,7 +201,7 @@ class Grid {
         
         let cell = null;
 
-        const size = this.#size;
+        const size = this.size;
         const cells = this.#cells;
         switch (this.#direction) {
             case DIRECTIONS.horizontal:

@@ -186,12 +186,36 @@ class Grid {
 
     selectNextCell() {
         if (!this.currentCell) return;
+        
+        let { i, j } = this.currentCell;
+        const size = this.#size;
+        const cells = this.#cells;
+        let cell = null;
+        switch (this.#direction) {
+            case DIRECTIONS.horizontal:
+                for (let j = this.currentCell.j; j < size; j++) {
+                    for (let i = this.currentCell.i + 1; i < size; i++) {
+                        if (!cells[j][i].correct) {
+                            cell = cells[j][i];
+                            break;
+                        }
+                    }
+                }
+                break;
 
-        this.disableKeys();
-
-        this.#currentCell = this.#cells[j][i];
-
-        this.enableKeys();
+            case DIRECTIONS.vertical:
+                for (let i = this.currentCell.i; i < size; i++) {
+                    for (let j = this.currentCell.j + 1; j < size; j++) {
+                        if (!cells[j][i].correct) {
+                            cell = cells[j][i];
+                            break;
+                        }
+                    }
+                }
+                break;
+        }
+        
+        this.#currentCell = cell;
 
     }
 

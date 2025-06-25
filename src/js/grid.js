@@ -190,17 +190,18 @@ class Grid {
     selectNextCell() {
         if (!this.currentCell) return;
         
+        let cell = null;
+
         const size = this.#size;
         const cells = this.#cells;
-        let cell = null;
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 for (let j = this.currentCell.j; j < size; j++) {
                     for (let i = this.currentCell.i + 1; i < size; i++) {
-                        if (!cells[j][i].correct) {
-                            cell = cells[j][i];
-                            break;
-                        }
+                        if (cells[j][i].correct) continue;
+
+                        cell = cells[j][i];
+                        break;
                     }
                 }
                 break;
@@ -208,10 +209,10 @@ class Grid {
             case DIRECTIONS.vertical:
                 for (let i = this.currentCell.i; i < size; i++) {
                     for (let j = this.currentCell.j + 1; j < size; j++) {
-                        if (!cells[j][i].correct) {
-                            cell = cells[j][i];
-                            break;
-                        }
+                        if (cells[j][i].correct) continue;
+                        
+                        cell = cells[j][i];
+                        break;
                     }
                 }
                 break;

@@ -190,7 +190,6 @@ class Grid {
     selectNextCell() {
         if (!this.currentCell) return;
         
-        let { i, j } = this.currentCell;
         const size = this.#size;
         const cells = this.#cells;
         let cell = null;

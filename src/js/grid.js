@@ -48,6 +48,9 @@ class Grid {
         }
     }
 
+    /* Private instance properties */
+    #controller;
+
     #size;
     #cells;
     #currentCell;

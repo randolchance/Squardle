@@ -17,6 +17,8 @@ export const DIRECTIONS = {
 
 export const HINTS = {
     unused: 0,
-    rightLetter: 1,
-    rightPlace: 2,
+    inWord: 1,
+    inWordHorizontal: 2,
+    inWordVertical: 3,
+    correct: 4,
 }

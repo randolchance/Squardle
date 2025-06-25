@@ -20,6 +20,8 @@ export default class Cell {
     #content;
     #correct;
     #inWord;
+    #inHorizontalWord;
+    #inVerticalWord;
 
     /* Private instance functions */
     #onClick;
@@ -46,6 +48,8 @@ export default class Cell {
         this.#content = null;
         this.#correct = false;
         this.#inWord = false;
+        this.#inHorizontalWord = false;
+        this.#inVerticalWord = false;
 
         this.#onClick = Cell.onClick.bind(this);
 
@@ -93,6 +97,9 @@ export default class Cell {
     }
 
     set correct( is_correct ) {
+        if (this.correct) return;
+
+        this.#inWord = Boolean( is_correct );
         this.#correct = Boolean( is_correct );
     }
 
@@ -104,6 +111,26 @@ export default class Cell {
         if (this.correct) return;
 
         this.#inWord = Boolean( is_in_word );
+    }
+
+    get inHorizontalWord() {
+        return this.#inHorizontalWord;
+    }
+
+    set inHorizontalWord( is_in_word ) {
+        if (this.correct) return;
+
+        this.#inHorizontalWord = this.#inWord = Boolean( is_in_word );
+    }
+
+    get inVerticalWord() {
+        return this.#inVerticalWord;
+    }
+
+    set inVerticalWord( is_in_word ) {
+        if (this.correct) return;
+
+        this.#inVerticalWord = this.#inWord = Boolean( is_in_word );
     }
 
     write( key ) {

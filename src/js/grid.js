@@ -8,6 +8,23 @@ import {
 import Cell from './cell';
 
 
+function setCellStatus( cell, status ) {
+    switch (status) {
+        case HINTS.correct:
+            cell.correct = true;
+            break;
+        case HINTS.inWord:
+            cell.inWord = true;
+            break;
+        case HINTS.inWordHorizontal:
+            cell.inWordHorizontal = true;
+            break;
+        case HINTS.inWordVertical:
+            cell.inWordVertical = true;
+            break;
+    }
+}
+
 const VALID_KEYS = CHARACTER_KEYS.concat(NON_CHARACTER_KEYS);
 
 const DEFAULT_GRID_SIZE = 5;
@@ -244,4 +261,29 @@ class Grid {
         this.#parseHints( hints );
 
     }
+
+    #parseHints( hints ) {
+        switch (this.#direction) {
+            case DIRECTIONS.horizontal:
+                const j = this.currentCell.j;
+                for (let i = 0; i < this.size; i++) {
+                    const cell = this.#cells[j][i];
+                    if (cell.correct) continue;
+
+                    setCellStatus( cell, hints[i] );
+                }
+                break;
+
+            case DIRECTIONS.vertical:
+                const i = this.currentCell.i;
+                for (let j = 0; j < this.size; j++) {
+                    const cell = this.#cells[j][i];
+                    if (cell.correct) continue;
+
+                    setCellStatus( cell, hints[j] );
+                }
+                break;
+        }
+    }
+
 }

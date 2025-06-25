@@ -128,7 +128,7 @@ class Grid {
             case DIRECTIONS.horizontal:
                 this.#direction = DIRECTIONS.vertical;
                 break;
-                
+
             case DIRECTIONS.vertical:
                 this.#direction = DIRECTIONS.horizontal;
                 break;

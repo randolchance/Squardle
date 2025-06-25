@@ -1,4 +1,9 @@
-import { CHARACTER_KEYS, NON_CHARACTER_KEYS, DIRECTIONS } from 'constants';
+import {
+    CHARACTER_KEYS,
+    NON_CHARACTER_KEYS,
+    DIRECTIONS,
+    HINTS,
+} from 'constants';
 
 import Cell from './cell';
 
@@ -222,4 +227,17 @@ class Grid {
 
     }
 
+    submit() {
+        const currentWord = this.currentWord;
+        if (!currentWord) {
+            this.#controller.incompleteWord();
+            return;
+        }
+
+        const hints = this.#controller.submit( currentWord );
+        if (!hints) return;
+
+        this.#parseHints( hints );
+
+    }
 }

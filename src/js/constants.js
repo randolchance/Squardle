@@ -14,3 +14,9 @@ export const DIRECTIONS = {
     horizontal: 0,
     vertical: 1,
 }
+
+export const HINTS = {
+    unused: 0,
+    rightLetter: 1,
+    rightPlace: 2,
+}

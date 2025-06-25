@@ -55,7 +55,11 @@ class Grid {
 
     #onKeydown;
 
-    constructor( size=DEFAULT_GRID_SIZE ) {
+    constructor( controller, size=DEFAULT_GRID_SIZE ) {
+        if (!controller) {
+            throw new Error(`No controller given!`);
+        }
+
         if (typeof size !== 'number') {
             throw new Error(`size is not a number! Given: ${size}`);
         } else if (size < 0) {
@@ -72,6 +76,8 @@ class Grid {
             }
             cells.push( row );
         }
+
+        this.#controller = controller;
 
         this.#cells = cells;
         this.#currentCell = null;

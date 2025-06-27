@@ -246,6 +246,28 @@ class Grid {
         
         this.#currentCell = cell;
 
+    nextWord() {
+        if (!this.currentCell) return;
+
+        let j = this.currentCell.j + 1;
+        do {
+
+            this.selectCell( 0, j++ );
+
+        } while (!this.currentCell && j < this.size);
+
+    }
+
+    previousWord() {
+        if (!this.currentCell) return;
+
+        let j = this.currentCell.j - 1;
+        do {
+
+            this.selectCell( 0, j-- );
+
+        } while (!this.currentCell && j >= 0);
+
     }
 
     submit() {

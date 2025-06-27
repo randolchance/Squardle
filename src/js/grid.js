@@ -183,8 +183,16 @@ class Grid {
     }
 
     selectCell( i, j ) {
+        if (i >= this.size || j >= this.size) {
+            this.deselectCell();
+            return;
+        }
+
         const cell = this.#cells[j][i];
-        if (cell.correct) return;
+        if (cell.correct) {
+            this.deselectCell();
+            return;
+        }
 
         this.disableKeys();
 

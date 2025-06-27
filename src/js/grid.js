@@ -255,11 +255,10 @@ class Grid {
             return;
         }
 
+        this.deselectCell();
+
         const hints = this.#controller.submit( currentWord );
-        if (!hints) return;
-
         this.#parseHints( hints );
-
     }
 
     #parseHints( hints ) {

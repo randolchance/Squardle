@@ -202,10 +202,7 @@ class Grid {
         
     }
 
-    disableKeys() {
-        if (!this.currentCell) return;
-
-        this.#currentCell.element.removeEventListener( 'keydown', this.#onKeydown );
+    deselectCell() {
 
         this.#currentCell = null;
 
@@ -218,10 +215,15 @@ class Grid {
         }
 
         this.currentCell.element.addEventListener( 'keydown', this.#onKeydown );
-        
     }
 
-    selectNextCell() {
+    disableKeys() {
+        if (!this.currentCell) return;
+
+        this.currentCell.element.removeEventListener( 'keydown', this.#onKeydown );
+    }
+
+    nextCell() {
         if (!this.currentCell) return;
         
         let cell = null;

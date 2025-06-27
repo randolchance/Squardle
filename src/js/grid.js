@@ -49,22 +49,33 @@ class Grid {
                 break;
             case NON_CHARACTER_KEYS.includes(key):
                 switch (key) {
+                    case 'Tab':
+                        this.toggleDirection();
+                        break;
                     case 'Escape':
-                        // Deselect all cells
+                        this.deselectCell();
                         break;
                     case 'ArrowUp':
+                        this.previousWord();
                         break;
-                    case 'Tab':
                     case 'ArrowRight':
-                        // Move cursor right
+                        this.nextCell();
                         break;
                     case 'ArrowDown':
+                        this.nextWord();
                         break;
                     case 'ArrowLeft':
+                        this.previousCell();
                         break;
                     case 'Enter':
                         // Submit word if complete
+                        this.submit();
                         break;
+                    case 'Backspace':
+                        this.currentCell.clear();
+                        this.previousCell();
+                        break;
+                    
                 }
                 break;
         }

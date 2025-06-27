@@ -8,6 +8,7 @@ export const NON_CHARACTER_KEYS = [
     'ArrowRight',
     'ArrowDown',
     'Escape',
+    'Backspace',
 ];
 
 export const DIRECTIONS = {

@@ -173,7 +173,7 @@ class Grid {
     clickCell( cell ) {
         if (cell === this.#currentCell) {
 
-            this.#toggleDirection();
+            this.toggleDirection();
 
         } else {
 

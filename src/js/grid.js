@@ -199,7 +199,7 @@ class Grid {
         this.#currentCell = cell;
 
         this.enableKeys();
-
+        
     }
 
     disableKeys() {

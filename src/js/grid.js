@@ -158,7 +158,7 @@ class Grid {
         return word;
     }
 
-    #toggleDirection() {
+    toggleDirection() {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 this.#direction = DIRECTIONS.vertical;

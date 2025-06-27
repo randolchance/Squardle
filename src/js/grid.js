@@ -225,36 +225,50 @@ class Grid {
 
     nextCell() {
         if (!this.currentCell) return;
-        
-        let cell = null;
 
         const size = this.size;
         const cells = this.#cells;
+        let i = this.currentCell.i;
+        let j = this.currentCell.j;
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
-                for (let j = this.currentCell.j; j < size; j++) {
-                    for (let i = this.currentCell.i + 1; i < size; i++) {
-                        if (cells[j][i].correct) continue;
-
-                        cell = cells[j][i];
-                        break;
-                    }
+                for (i += 1; i < size; i++) {
+                    if (!cells[j][i].correct) break;
                 }
                 break;
 
             case DIRECTIONS.vertical:
-                for (let i = this.currentCell.i; i < size; i++) {
-                    for (let j = this.currentCell.j + 1; j < size; j++) {
-                        if (cells[j][i].correct) continue;
-                        
-                        cell = cells[j][i];
-                        break;
-                    }
+                for (j += 1; j < size; j++) {
+                    if (!cells[j][i].correct) break;
                 }
                 break;
         }
         
-        this.#currentCell = cell;
+        this.selectCell( i, j );
+    }
+
+    previousCell() {
+        if (!this.currentCell) return;
+
+        const cells = this.#cells;
+        let i = this.currentCell.i;
+        let j = this.currentCell.j;
+        switch (this.#direction) {
+            case DIRECTIONS.horizontal:
+                for (i -= 1; i >= 0; i--) {
+                    if (!cells[j][i].correct) break;
+                }
+                break;
+
+            case DIRECTIONS.vertical:
+                for (j -= 1; j >= 0; j--) {
+                    if (!cells[j][i].correct) break;
+                }
+                break;
+        }
+        
+        this.selectCell( i, j );
+    }
 
     nextWord() {
         if (!this.currentCell) return;

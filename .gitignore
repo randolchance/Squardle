@@ -153,6 +153,7 @@ dist
 include
 lib
 scripts
+pyvenv.cfg
 
 # Other
 .DS_Store

@@ -7,7 +7,7 @@ import {
     MODES,
 } from 'constants';
 
-import GridCell from './gridcell';
+import GridCell from './cell';
 
 
 function setCellStatus( cell, status ) {

@@ -36,19 +36,46 @@ export default class GameGrid {
                         this.deselectCell();
                         break;
                     case 'ArrowUp':
-                        this.previousWord();
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.previousWord();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.previousCell();
+                                break;
+                        }
                         break;
                     case 'ArrowRight':
-                        this.nextCell();
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.nextCell();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.nextWord();
+                                break;
+                        }
                         break;
                     case 'ArrowDown':
-                        this.nextWord();
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.nextWord();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.nextCell();
+                                break;
+                        }
                         break;
                     case 'ArrowLeft':
-                        this.previousCell();
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.previousCell();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.previousWord();
+                                break;
+                        }
                         break;
                     case 'Enter':
-                        // Submit word if complete
                         this.submit();
                         break;
                     case 'Backspace':

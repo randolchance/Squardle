@@ -387,13 +387,13 @@ export default class GameGrid {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 for (const cell of this.currentRow) {
-                    cell.lock();
+                    cell.lock( DIRECTIONS.horizontal );
                 }
                 break;
                 
             case DIRECTIONS.vertical:
                 for (const cell of this.currentColumn) {
-                    cell.lock();
+                    cell.lock( DIRECTIONS.vertical );
                 }
                 break;
         }

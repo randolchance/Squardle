@@ -1,5 +1,5 @@
 import { CHARACTER_KEYS } from 'constants';
-import { HINTS } from './constants';
+import { DIRECTIONS, HINTS } from './constants';
 
 export default class GridCell {
 
@@ -39,7 +39,7 @@ export default class GridCell {
 
         this.#content = null;
 
-        this.#locked = false;
+        this.#locked = DIRECTIONS.neither;
         this.#correct = false;
 
         this.#hint = null;
@@ -87,15 +87,15 @@ export default class GridCell {
     }
 
     get disabled() {
-        return this.#correct || this.#locked;
+        return this.#correct || this.#locked == DIRECTIONS.both;
     }
 
     get selected() {
         return this === this.grid.currentCell;
     }
 
-    lock() {
-        this.#locked = true;
+    lock( direction ) {
+        this.#locked |= direction;
     }
 
     write( key ) {

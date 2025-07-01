@@ -28,7 +28,6 @@ function setCellStatus( cell, status ) {
     }
 }
 
-
 export default class GameGrid {
 
     static onKeydown( event ) {

@@ -71,7 +71,7 @@ export default class GameGrid {
     #size;
     #cells;
     #currentCell;
-    #_direction;
+    #direction;
 
     constructor( guessController, puzzle_number, mode=MODES.normal, size=DEFAULT_GRID_SIZE ) {
         if (typeof size !== 'number') {
@@ -100,7 +100,7 @@ export default class GameGrid {
 
         this.#cells = cells;
         this.#currentCell = null;
-        this.#_direction = DIRECTIONS.horizontal;
+        this.#direction = DIRECTIONS.horizontal;
 
         this.onKeydown = GameGrid.onKeydown.bind(this);
 
@@ -130,12 +130,12 @@ export default class GameGrid {
         return this.#currentCell;
     }
 
-    get #direction() {
-        return this.#_direction;
+    get direction() {
+        return this.#direction;
     }
 
-    set #direction( direction ) {
-        this.#_direction = direction;
+    set direction( direction ) {
+        this.#direction = direction;
     }
 
     get currentRowIndex() {
@@ -168,7 +168,7 @@ export default class GameGrid {
         if (!this.currentCell) return null;
 
         let word = '';
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
                 for (const cell of this.currentRow) {
                     if (!cell.content) return null;
@@ -191,6 +191,7 @@ export default class GameGrid {
 
     get word_index() {
         return this.#direction === DIRECTIONS.horizontal ?
+        return this.direction === DIRECTIONS.horizontal ?
             this.currentRowIndex : this.size + this.currentColumnIndex;
     }
 
@@ -204,17 +205,17 @@ export default class GameGrid {
     }
 
     toggleDirection() {
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
                 if (this.currentCell.locked & DIRECTIONS.vertical) return;
 
-                this.#direction = DIRECTIONS.vertical;
+                this.direction = DIRECTIONS.vertical;
                 break;
 
             case DIRECTIONS.vertical:
                 if (this.currentCell.locked & DIRECTIONS.horizontal) return;
 
-                this.#direction = DIRECTIONS.horizontal;
+                this.direction = DIRECTIONS.horizontal;
                 break;
         }
 
@@ -250,7 +251,7 @@ export default class GameGrid {
 
         this.#currentCell = cell;
 
-        if (this.#direction & cell.locked) {
+        if (this.direction & cell.locked) {
             
             this.toggleDirection();
         
@@ -289,7 +290,7 @@ export default class GameGrid {
         const cells = this.#cells;
         let i = this.currentRowIndex;
         let j = this.currentColumnIndex;
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
                 for (i += 1; i < size; i++) {
                     if (!cells[j][i].disabled) break;
@@ -312,7 +313,7 @@ export default class GameGrid {
         const cells = this.#cells;
         let i = this.currentRowIndex;
         let j = this.currentColumnIndex;
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
                 for (i -= 1; i >= 0; i--) {
                     if (!cells[j][i].disabled) break;
@@ -332,7 +333,7 @@ export default class GameGrid {
     nextWord() {
         if (!this.currentCell) return;
 
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
 
                 let j = this.currentRowIndex + 1;
@@ -361,7 +362,7 @@ export default class GameGrid {
     previousWord() {
         if (!this.currentCell) return;
         
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
 
                 let j = this.currentRowIndex - 1;
@@ -388,7 +389,7 @@ export default class GameGrid {
     }
 
     #lockWord() {
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
                 for (const cell of this.currentRow) {
                     cell.lock( DIRECTIONS.horizontal );
@@ -456,7 +457,7 @@ export default class GameGrid {
 
 
     #parseHints( hints ) {
-        switch (this.#direction) {
+        switch (this.direction) {
             case DIRECTIONS.horizontal:
                 for (const [cell, h] of [...this.currentRow].map( (cell, h) => [cell, h] )) {
                     if (cell.correct) continue;

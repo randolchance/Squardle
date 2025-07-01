@@ -295,7 +295,6 @@ export default class GameGrid {
     }
 
     selectFirstCell() {
-        
         const cell = this.currentWordCells.next().value;
         if (!cell) return;
 
@@ -440,7 +439,7 @@ export default class GameGrid {
     #lockWord() {
 
         for (const cell of this.currentWordCells) cell.lock( this.direction ^ DIRECTIONS.both );
-        
+
     }
 
     async submit() {

@@ -438,22 +438,9 @@ export default class GameGrid {
     }
 
     #lockWord() {
-        switch (this.direction) {
-            case DIRECTIONS.horizontal:
-                for (const cell of this.currentRow) {
-                    cell.lock( DIRECTIONS.horizontal );
-                }
-                break;
-                
-            case DIRECTIONS.vertical:
-                for (const cell of this.currentColumn) {
-                    cell.lock( DIRECTIONS.vertical );
-                }
-                break;
-        }
 
-        return word;
-
+        for (const cell of this.currentWordCells) cell.lock( this.direction ^ DIRECTIONS.both );
+        
     }
 
     async submit() {

@@ -5,26 +5,21 @@ export default class Cell {
     /* Bindables */
     static onClick( event ) {
         event.preventDefault();
-        if (!this.enabled) return;
+
+        this.keysEnabled = true;
         
         this.grid.clickCell( this );
-
     }
 
     /* Private instance properties */
     #i;
     #j;
     #grid;
-    #element;
-    #enabled;
     #content;
     #correct;
     #inWord;
     #inHorizontalWord;
     #inVerticalWord;
-
-    /* Private instance functions */
-    #onClick;
 
     constructor( i, j, grid ) {
         if (typeof i !== 'number' || typeof j !== 'number') {
@@ -33,25 +28,19 @@ export default class Cell {
             throw new Error(`Indexes ${i}, ${j} are out of bounds! grid size is ${grid.size}`);
         }
 
-        const element = document.createElement('div');
-        element.classList.add('cell');
-        element.setAttribute('data-i', i);
-        element.setAttribute('data-j', j);
-
         this.#i = i;
         this.#j = j;
 
         this.#grid = grid;
-        this.#element = element;
-        this.#enabled = false;
 
         this.#content = null;
+
         this.#correct = false;
         this.#inWord = false;
         this.#inHorizontalWord = false;
         this.#inVerticalWord = false;
 
-        this.#onClick = Cell.onClick.bind(this);
+        this.onClick = GridCell.onClick.bind(this);
 
     }
 
@@ -67,27 +56,6 @@ export default class Cell {
         return this.#grid;
     }
 
-    get element() {
-        return this.#element;
-    }
-
-    get enabled() {
-        return this.#enabled;
-    }
-
-    set enabled( state ) {
-        switch (Boolean(state) && !this.correct) {
-            case true:
-                this.#element.addEventListener('click', this.#onClick);
-                this.#enabled = true;
-                break;
-            case false:
-                this.#element.removeEventListener('click', this.#onClick);
-                this.#enabled = false;
-                break;
-        }
-    }
-
     get content() {
         return this.#content;
     }
@@ -99,8 +67,19 @@ export default class Cell {
     set correct( is_correct ) {
         if (this.correct) return;
 
-        this.#inWord = Boolean( is_correct );
-        this.#correct = Boolean( is_correct );
+        is_correct = Boolean( is_correct )
+
+        this.#inHorizontalWord = this.#inVerticalWord = this.#inWord = is_correct;
+
+        this.#correct = is_correct;
+    }
+
+    get disabled() {
+        return this.#correct;
+    }
+
+    get selected() {
+        return this === this.grid.currentCell;
     }
 
     get inWord() {

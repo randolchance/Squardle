@@ -1,4 +1,5 @@
 import { CHARACTER_KEYS } from 'constants';
+import { HINTS } from './constants';
 
 export default class GridCell {
 
@@ -22,6 +23,8 @@ export default class GridCell {
     #inHorizontalWord;
     #inVerticalWord;
 
+    #hint;
+
     constructor( i, j, grid ) {
         if (typeof i !== 'number' || typeof j !== 'number') {
             throw new Error(`Index is invalid! Given: ${i}, ${j}`);
@@ -38,9 +41,8 @@ export default class GridCell {
 
         this.#locked = false;
         this.#correct = false;
-        this.#inWord = false;
-        this.#inHorizontalWord = false;
-        this.#inVerticalWord = false;
+
+        this.#hint = null;
 
         this.onClick = GridCell.onClick.bind(this);
 
@@ -66,6 +68,20 @@ export default class GridCell {
         return this.#locked;
     }
 
+    get hint() {
+        return this.#hint;
+    }
+
+    set hint( hint ) {
+        if (!Object.values(HINTS)) {
+            throw new Error(`Invalid hint enum! Given: ${ hint }`);
+        }
+
+        if (hint === HINTS.correct) this.#correct = is_correct;
+
+        this.#hint = hint;
+    }
+
     get correct() {
         return this.#correct;
     }
@@ -76,44 +92,6 @@ export default class GridCell {
 
     get selected() {
         return this === this.grid.currentCell;
-    }
-
-    get inWord() {
-        return this.#inWord;
-    }
-
-    set inWord( is_in_word ) {
-        if (this.correct) return;
-
-        this.#inWord = Boolean( is_in_word );
-    }
-
-    get inHorizontalWord() {
-        return this.#inHorizontalWord;
-    }
-
-    set inHorizontalWord( is_in_word ) {
-        if (this.correct) return;
-
-        this.#inHorizontalWord = this.#inWord = Boolean( is_in_word );
-    }
-
-    get inVerticalWord() {
-        return this.#inVerticalWord;
-    }
-
-    set inVerticalWord( is_in_word ) {
-        if (this.correct) return;
-
-        this.#inVerticalWord = this.#inWord = Boolean( is_in_word );
-    }
-
-    isCorrect() {
-        is_correct = Boolean( is_correct )
-
-        this.#inHorizontalWord = this.#inVerticalWord = this.#inWord = is_correct;
-
-        this.#correct = is_correct;
     }
 
     lock() {

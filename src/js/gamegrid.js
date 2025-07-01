@@ -234,7 +234,7 @@ export default class GameGrid {
         }
 
         const cell = this.#cells[j][i];
-        if (cell.correct) {
+        if (cell.correct || cell.locked === DIRECTIONS.both) {
             this.deselectCell();
             return;
         }

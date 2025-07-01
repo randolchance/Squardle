@@ -271,8 +271,8 @@ export default class GameGrid {
 
         const size = this.size;
         const cells = this.#cells;
-        let i = this.currentCell.i;
-        let j = this.currentCell.j;
+        let i = this.currentRowIndex;
+        let j = this.currentColumnIndex;
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 for (i += 1; i < size; i++) {
@@ -294,8 +294,8 @@ export default class GameGrid {
         if (!this.currentCell) return;
 
         const cells = this.#cells;
-        let i = this.currentCell.i;
-        let j = this.currentCell.j;
+        let i = this.currentRowIndex;
+        let j = this.currentColumnIndex;
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 for (i -= 1; i >= 0; i--) {

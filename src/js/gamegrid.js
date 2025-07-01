@@ -122,6 +122,10 @@ export default class GameGrid {
         return this.#size;
     }
 
+    get cells() {
+        return this.#cells;
+    }
+
     get currentCell() {
         return this.#currentCell;
     }

@@ -91,6 +91,8 @@ export default class GameGrid {
             cells.push( row );
         }
 
+        this.#guessController = guessController;
+
         this.#puzzle_number = puzzle_number;
         this.#mode = mode;
 

@@ -306,6 +306,9 @@ export default class GameGrid {
         }
         
         this.selectCell( i, j );
+
+        if (!this.currentCell) this.nextWord();
+
     }
 
     previousCell() {
@@ -329,6 +332,9 @@ export default class GameGrid {
         }
         
         this.selectCell( i, j );
+
+        if (!this.currentCell) this.previousWord();
+
     }
 
     nextWord() {

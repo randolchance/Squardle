@@ -293,6 +293,14 @@ export default class GameGrid {
         this.#currentCell = null;
 
     }
+
+    selectFirstCell() {
+        
+        const cell = this.currentWordCells.next().value;
+        if (!cell) return;
+
+        this.selectCell( cell.i, cell.j );
+    }
     
     enableKeys() {
         if (!this.currentCell) return;

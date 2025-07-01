@@ -62,20 +62,12 @@ export default class GridCell {
         return this.#content;
     }
 
-    get correct() {
-        return this.#correct;
     get locked() {
         return this.#locked;
     }
 
-    set correct( is_correct ) {
-        if (this.correct) return;
-
-        is_correct = Boolean( is_correct )
-
-        this.#inHorizontalWord = this.#inVerticalWord = this.#inWord = is_correct;
-
-        this.#correct = is_correct;
+    get correct() {
+        return this.#correct;
     }
 
     get disabled() {
@@ -116,9 +108,18 @@ export default class GridCell {
         this.#inVerticalWord = this.#inWord = Boolean( is_in_word );
     }
 
+    isCorrect() {
+        is_correct = Boolean( is_correct )
+
+        this.#inHorizontalWord = this.#inVerticalWord = this.#inWord = is_correct;
+
+        this.#correct = is_correct;
+    }
+
     lock() {
         this.#locked = true;
     }
+
     write( key ) {
         if (!CHARACTER_KEYS.includes( key )) {
             console.warn(`${ key } is not a valid key to write to a cell`);

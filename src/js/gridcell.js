@@ -16,6 +16,7 @@ export default class GridCell {
     #j;
     #grid;
     #content;
+    #locked;
     #correct;
     #inWord;
     #inHorizontalWord;
@@ -35,6 +36,7 @@ export default class GridCell {
 
         this.#content = null;
 
+        this.#locked = false;
         this.#correct = false;
         this.#inWord = false;
         this.#inHorizontalWord = false;
@@ -62,6 +64,8 @@ export default class GridCell {
 
     get correct() {
         return this.#correct;
+    get locked() {
+        return this.#locked;
     }
 
     set correct( is_correct ) {
@@ -75,7 +79,7 @@ export default class GridCell {
     }
 
     get disabled() {
-        return this.#correct;
+        return this.#correct || this.#locked;
     }
 
     get selected() {
@@ -112,6 +116,9 @@ export default class GridCell {
         this.#inVerticalWord = this.#inWord = Boolean( is_in_word );
     }
 
+    lock() {
+        this.#locked = true;
+    }
     write( key ) {
         if (!CHARACTER_KEYS.includes( key )) {
             console.warn(`${ key } is not a valid key to write to a cell`);

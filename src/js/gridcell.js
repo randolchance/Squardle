@@ -19,9 +19,6 @@ export default class GridCell {
     #content;
     #locked;
     #correct;
-    #inWord;
-    #inHorizontalWord;
-    #inVerticalWord;
 
     #hint;
 

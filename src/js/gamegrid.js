@@ -280,7 +280,7 @@ export default class GameGrid {
         
         } else {
 
-            this.#guessController.select( this.word_index );
+            this.#guessController.selected_word_index = this.word_index;
 
         }
 

@@ -316,24 +316,58 @@ export default class GameGrid {
     nextWord() {
         if (!this.currentCell) return;
 
-        let j = this.currentCell.j + 1;
-        do {
+        switch (this.#direction) {
+            case DIRECTIONS.horizontal:
 
-            this.selectCell( 0, j++ );
+                let j = this.currentRowIndex + 1;
+                do {
 
-        } while (!this.currentCell && j < this.size);
+                    this.selectCell( 0, j++ );
+
+                } while (!this.currentCell && j < this.size);
+
+                break;
+
+            case DIRECTIONS.vertical:
+
+                let i = this.currentColumnIndex + 1;
+                do {
+
+                    this.selectCell( 0, i++ );
+
+                } while (!this.currentCell && i < this.size);
+
+                break;
+        }
 
     }
 
     previousWord() {
         if (!this.currentCell) return;
+        
+        switch (this.#direction) {
+            case DIRECTIONS.horizontal:
 
-        let j = this.currentCell.j - 1;
-        do {
+                let j = this.currentRowIndex - 1;
+                do {
 
-            this.selectCell( 0, j-- );
+                    this.selectCell( 0, j-- );
 
-        } while (!this.currentCell && j >= 0);
+                } while (!this.currentCell && j >= 0);
+
+                break;
+
+            case DIRECTIONS.vertical:
+
+                let i = this.currentColumnIndex - 1;
+                do {
+
+                    this.selectCell( i--, 0 );
+
+                } while (!this.currentCell && i >= 0);
+
+                break;
+        }
 
     }
 

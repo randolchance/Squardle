@@ -526,6 +526,10 @@ export default class GameGrid {
 
     }
 
+    #invalidWord() {
+
+    }
+
     #parseHints( hints ) {
         for (const [cell, h] of [...this.currentWordCells].map( (cell, h) => [cell, h] )) {
             if (cell.correct) continue;

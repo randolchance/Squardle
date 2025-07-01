@@ -1,8 +1,10 @@
 import {
     CHARACTER_KEYS,
     NON_CHARACTER_KEYS,
+    VALID_KEYS,
     DIRECTIONS,
     HINTS,
+    MODES,
 } from 'constants';
 
 import Cell from './cell';
@@ -25,15 +27,11 @@ function setCellStatus( cell, status ) {
     }
 }
 
-const VALID_KEYS = CHARACTER_KEYS.concat(NON_CHARACTER_KEYS);
-
 const DEFAULT_GRID_SIZE = 5;
 
 class Grid {
 
     static onKeydown( event ) {
-        event.preventDefault();
-
         const { key } = event;
         if (!VALID_KEYS.includes(key)) return;
 
@@ -82,20 +80,15 @@ class Grid {
     }
 
     /* Private instance properties */
-    #controller;
+
+    #disabled;
 
     #size;
     #cells;
     #currentCell;
     #_direction;
 
-    #onKeydown;
-
-    constructor( controller, size=DEFAULT_GRID_SIZE ) {
-        if (!controller) {
-            throw new Error(`No controller given!`);
-        }
-
+    constructor( puzzle_number, mode=MODES.normal, size=DEFAULT_GRID_SIZE ) {
         if (typeof size !== 'number') {
             throw new Error(`size is not a number! Given: ${size}`);
         } else if (size < 0) {
@@ -113,14 +106,29 @@ class Grid {
             cells.push( row );
         }
 
-        this.#controller = controller;
+        this.#puzzle_number = puzzle_number;
+        this.#mode = mode;
+
+        this.#disabled = false;
 
         this.#cells = cells;
         this.#currentCell = null;
         this.#_direction = DIRECTIONS.horizontal;
 
-        this.#onKeydown = Grid.onKeydown.bind(this);
+        this.onKeydown = GameGrid.onKeydown.bind(this);
 
+    }
+
+    get mode() {
+        return this.#mode;
+    }
+
+    get disabled() {
+        return this.#disabled;
+    }
+
+    set disabled( state ) {
+        this.#disabled = Boolean( state );
     }
 
     get size() {
@@ -167,6 +175,14 @@ class Grid {
         }
 
         return word;
+    }
+
+    get currentRow() {
+        return this.currentCell ? this.currentCell.i : null;
+    }
+
+    get currentColumn() {
+        return this.currentCell ? this.currentCell.j : null;
     }
 
     toggleDirection() {
@@ -220,18 +236,16 @@ class Grid {
     }
     
     enableKeys() {
-        if (!this.currentCell) {
-            console.warn(`Keydown events activation attempted with no cell selected!`);
-            return;
-        }
+        if (!this.currentCell) return;
 
-        this.currentCell.element.addEventListener( 'keydown', this.#onKeydown );
+        this.currentCell.keysEnabled = true;
+
     }
 
     disableKeys() {
         if (!this.currentCell) return;
 
-        this.currentCell.element.removeEventListener( 'keydown', this.#onKeydown );
+        this.currentCell.keysEnabled = false;
     }
 
     nextCell() {

@@ -243,6 +243,7 @@ export default class GameGrid {
 
         this.#currentCell = cell;
 
+        if (this.#direction & cell.locked) this.toggleDirection();
         this.enableKeys();
         
     }

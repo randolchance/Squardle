@@ -149,15 +149,39 @@ export default class GameGrid {
         this.#_direction = direction;
     }
 
+    get currentRowIndex() {
+        return this.currentCell ? this.currentCell.i : null;
+    }
+
+    get currentColumnIndex() {
+        return this.currentCell ? this.currentCell.j : null;
+    }
+
+    get currentRow() {
+        return function*() {
+            const currentRowIndex = this.currentRowIndex;
+            for (let i = 0; i < this.size; i++) {
+                yield this.cells[currentRowIndex][i];
+            }
+        }
+    }
+
+    get currentColumn() {
+        return function*() {
+            const currentColumnIndex = this.currentColumnIndex;
+            for (let j = 0; j < this.size; j++) {
+                yield this.cells[j][currentColumnIndex];
+            }
+        }
+    }
+
     get currentWord() {
         if (!this.currentCell) return null;
 
         let word = '';
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
-                const j = this.currentCell.j;
-                
-                for (const cell of this.#cells[j]) {
+                for (const cell of this.currentRow) {
                     if (!cell.content) return null;
 
                     word += cell.content;
@@ -165,10 +189,7 @@ export default class GameGrid {
                 break;
                 
             case DIRECTIONS.vertical:
-                const i = this.currentCell.i;
-                
-                for (const row of this.#cells) {
-                    const cell = row[i];
+                for (const cell of this.currentColumn) {
                     if (!cell.content) return null;
 
                     word += cell.content;
@@ -177,14 +198,6 @@ export default class GameGrid {
         }
 
         return word;
-    }
-
-    get currentRow() {
-        return this.currentCell ? this.currentCell.i : null;
-    }
-
-    get currentColumn() {
-        return this.currentCell ? this.currentCell.j : null;
     }
 
     toggleDirection() {

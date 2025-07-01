@@ -195,27 +195,18 @@ export default class GameGrid {
         }
     }
 
+    get currentWordCells() {
+        const target = this.direction === DIRECTIONS.horizontal
+            ? this.currentRow
+            : this.currentColumn;
+
+        for (const cell of target) yield cell;
+    }
+
     get current_word() {
-        if (!this.currentCell) return null;
 
         let word = '';
-        switch (this.direction) {
-            case DIRECTIONS.horizontal:
-                for (const cell of this.currentRow) {
-                    if (!cell.content) return null;
-
-                    word += cell.content;
-                }
-                break;
-                
-            case DIRECTIONS.vertical:
-                for (const cell of this.currentColumn) {
-                    if (!cell.content) return null;
-
-                    word += cell.content;
-                }
-                break;
-        }
+        for (const cell of this.currentWordCells) word += cell.content;
 
         return word;
     }

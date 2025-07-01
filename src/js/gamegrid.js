@@ -481,7 +481,11 @@ export default class GameGrid {
         }
 
         if (!hints) {
+
             this.#invalidWord();
+
+            this.selectFirstCell();
+
             return;
         }
 
@@ -502,7 +506,7 @@ export default class GameGrid {
         
         } else {
 
-
+            this.selectFirstCell();
 
         }
 

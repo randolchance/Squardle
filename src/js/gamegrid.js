@@ -472,8 +472,7 @@ export default class GameGrid {
                 throw new Error(`Response status: ${response.status}`);
             }
 
-            const hints = response.json();
-            this.#parseHints( hints );
+            hints = response.json();
 
         } catch (e) {
 
@@ -483,8 +482,40 @@ export default class GameGrid {
 
             this.#error();
 
+            return;
         }
 
+        if (!hints) {
+            this.#invalidWord();
+            return;
+        }
+
+        this.#parseHints( hints );
+
+        const correct_guess = hints.every( hint => hint === HINTS.correct );
+
+        const remaining_guesses = this.#guessController.guess( this.current_word, hints );
+        if (remaining_guesses == 0) {
+
+            this.#lockWord();
+
+            this.nextWord();
+        
+        } else if (correct_guess) {
+            
+            this.nextWord();
+        
+        } else {
+
+
+
+        }
+
+        if (!this.currentCell) {
+
+            // Win condition because there are no words left to select
+
+        }
         
     }
 

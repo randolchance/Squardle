@@ -194,6 +194,15 @@ export default class GameGrid {
             this.currentRowIndex : this.size + this.currentColumnIndex;
     }
 
+    get is_solved() {
+        for (const row of this.cells) {
+            for (const cell of row) {
+                if (!cell.correct) return false;
+            }
+        }
+        return true;
+    }
+
     toggleDirection() {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:

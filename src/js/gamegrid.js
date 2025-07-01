@@ -157,7 +157,7 @@ export default class GameGrid {
         }
     }
 
-    get currentWord() {
+    get current_word() {
         if (!this.currentCell) return null;
 
         let word = '';
@@ -336,8 +336,8 @@ export default class GameGrid {
     }
 
     async submit() {
-        const currentWord = this.currentWord;
-        if (!currentWord) {
+        const current_word = this.current_word;
+        if (!current_word) {
             this.#incompleteWord();
             return;
         }
@@ -350,7 +350,7 @@ export default class GameGrid {
         const params = new URLSearchParams({
             p: this.#puzzle_number,
             i: word_index,
-            word: this.currentWord,
+            word: current_word,
             m: this.mode,
         });
 

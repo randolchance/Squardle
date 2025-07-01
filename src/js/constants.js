@@ -16,8 +16,10 @@ export const NON_CHARACTER_KEYS = [
 export const VALID_KEYS = CHARACTER_KEYS.concat(NON_CHARACTER_KEYS);
 
 export const DIRECTIONS = {
-    horizontal: 0,
-    vertical: 1,
+    neither: 0,
+    horizontal: 1,
+    vertical: 2,
+    both: 3,
 }
 
 export const HINTS = {

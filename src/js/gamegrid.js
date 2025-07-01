@@ -175,6 +175,8 @@ export default class GameGrid {
 
     get currentRow() {
         return function*() {
+            if (!this.currentCell) return;
+
             const currentRowIndex = this.currentRowIndex;
             for (let i = 0; i < this.size; i++) {
                 yield this.cells[currentRowIndex][i];
@@ -184,6 +186,8 @@ export default class GameGrid {
 
     get currentColumn() {
         return function*() {
+            if (!this.currentCell) return;
+
             const currentColumnIndex = this.currentColumnIndex;
             for (let j = 0; j < this.size; j++) {
                 yield this.cells[j][currentColumnIndex];

@@ -183,6 +183,11 @@ export default class GameGrid {
         return word;
     }
 
+    get word_index() {
+        return this.#direction === DIRECTIONS.horizontal ?
+            this.currentRowIndex : this.size + this.currentColumnIndex;
+    }
+
     toggleDirection() {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
@@ -350,7 +355,7 @@ export default class GameGrid {
 
         const params = new URLSearchParams({
             p: this.#puzzle_number,
-            i: word_index,
+            i: this.word_index,
             word: current_word,
             m: this.mode,
         });

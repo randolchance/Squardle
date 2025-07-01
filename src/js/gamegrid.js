@@ -215,6 +215,7 @@ export default class GameGrid {
         }
 
         this.#guessController.select( this.word_index );
+
     }
 
     clickCell( cell ) {
@@ -269,7 +270,6 @@ export default class GameGrid {
         if (!this.currentCell) return;
 
         this.currentCell.keysEnabled = true;
-
     }
 
     disableKeys() {
@@ -405,7 +405,9 @@ export default class GameGrid {
     async submit() {
         const current_word = this.current_word;
         if (!current_word) {
+
             this.#incompleteWord();
+
             return;
         }
 

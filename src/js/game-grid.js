@@ -8,7 +8,7 @@ import {
     MODES,
 } from 'constants';
 
-import GridCell from './gridcell';
+import GridCell from './grid-cell';
 
 
 export default class GameGrid {

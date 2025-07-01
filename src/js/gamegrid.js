@@ -292,13 +292,13 @@ export default class GameGrid {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 for (i += 1; i < size; i++) {
-                    if (!cells[j][i].correct) break;
+                    if (!cells[j][i].disabled) break;
                 }
                 break;
 
             case DIRECTIONS.vertical:
                 for (j += 1; j < size; j++) {
-                    if (!cells[j][i].correct) break;
+                    if (!cells[j][i].disabled) break;
                 }
                 break;
         }
@@ -315,13 +315,13 @@ export default class GameGrid {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
                 for (i -= 1; i >= 0; i--) {
-                    if (!cells[j][i].correct) break;
+                    if (!cells[j][i].disabled) break;
                 }
                 break;
 
             case DIRECTIONS.vertical:
                 for (j -= 1; j >= 0; j--) {
-                    if (!cells[j][i].correct) break;
+                    if (!cells[j][i].disabled) break;
                 }
                 break;
         }

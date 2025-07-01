@@ -1,6 +1,6 @@
 import { CHARACTER_KEYS } from 'constants';
 
-export default class Cell {
+export default class GridCell {
 
     /* Bindables */
     static onClick( event ) {

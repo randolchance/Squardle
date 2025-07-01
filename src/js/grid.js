@@ -7,7 +7,7 @@ import {
     MODES,
 } from 'constants';
 
-import Cell from './cell';
+import GridCell from './gridcell';
 
 
 function setCellStatus( cell, status ) {
@@ -29,7 +29,7 @@ function setCellStatus( cell, status ) {
 
 const DEFAULT_GRID_SIZE = 5;
 
-class Grid {
+export default class GameGrid {
 
     static onKeydown( event ) {
         const { key } = event;
@@ -80,6 +80,8 @@ class Grid {
     }
 
     /* Private instance properties */
+    #puzzle_number;
+    #mode;
 
     #disabled;
 
@@ -101,7 +103,7 @@ class Grid {
         for (let j = 0; j < size; j++) {
             const row = [];
             for (let i = 0; i < size; i++) {
-                row.push( new Cell( i, j, this ) );
+                row.push( new GridCell( i, j, this ) );
             }
             cells.push( row );
         }
@@ -319,17 +321,55 @@ class Grid {
 
     }
 
-    submit() {
+    async submit() {
         const currentWord = this.currentWord;
         if (!currentWord) {
-            this.#controller.incompleteWord();
+            this.#incompleteWord();
             return;
         }
 
+        const word_index = this.#_direction === DIRECTIONS.horizontal ?
+            this.currentRow : this.size + this.currentColumn;
+
         this.deselectCell();
 
-        const hints = this.#controller.submit( currentWord );
-        this.#parseHints( hints );
+        const params = new URLSearchParams({
+            p: this.#puzzle_number,
+            i: word_index,
+            word: this.currentWord,
+            m: this.mode,
+        });
+
+        try {
+
+            const response = await fetch(`/guess?${params}}`);
+
+            if (!response.ok) {
+                throw new Error(`Response status: ${response.status}`);
+            }
+
+            const hints = response.json();
+            this.#parseHints( hints );
+
+        } catch (e) {
+
+            console.error(e.message);
+
+            // Do something with the error and pass it to this.#error
+
+            this.#error();
+
+        }
+
+        
+    }
+
+    #error() {
+
+    }
+
+    #incompleteWord() {
+
     }
 
     #parseHints( hints ) {

@@ -1,4 +1,5 @@
 import {
+    DEFAULT_GRID_SIZE,
     CHARACTER_KEYS,
     NON_CHARACTER_KEYS,
     VALID_KEYS,
@@ -27,7 +28,6 @@ function setCellStatus( cell, status ) {
     }
 }
 
-const DEFAULT_GRID_SIZE = 5;
 
 export default class GameGrid {
 

@@ -1,3 +1,5 @@
+const DEFAULT_GRID_SIZE = 5;
+
 export const CHARACTER_KEYS = [...'abcdefghijklmnopqrstuvwxyz'];
 
 export const NON_CHARACTER_KEYS = [

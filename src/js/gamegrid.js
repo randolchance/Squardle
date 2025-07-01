@@ -62,6 +62,7 @@ export default class GameGrid {
     }
 
     /* Private instance properties */
+    #guessController;
     #puzzle_number;
     #mode;
 
@@ -72,7 +73,7 @@ export default class GameGrid {
     #currentCell;
     #_direction;
 
-    constructor( puzzle_number, mode=MODES.normal, size=DEFAULT_GRID_SIZE ) {
+    constructor( guessController, puzzle_number, mode=MODES.normal, size=DEFAULT_GRID_SIZE ) {
         if (typeof size !== 'number') {
             throw new Error(`size is not a number! Given: ${size}`);
         } else if (size < 0) {

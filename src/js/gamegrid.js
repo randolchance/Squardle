@@ -526,24 +526,11 @@ export default class GameGrid {
 
     }
 
-
     #parseHints( hints ) {
-        switch (this.direction) {
-            case DIRECTIONS.horizontal:
-                for (const [cell, h] of [...this.currentRow].map( (cell, h) => [cell, h] )) {
-                    if (cell.correct) continue;
+        for (const [cell, h] of [...this.currentWordCells].map( (cell, h) => [cell, h] )) {
+            if (cell.correct) continue;
 
-                    cell.hint = hints[h];
-                }
-                break;
-
-            case DIRECTIONS.vertical:
-                for (const [cell, h] of [...this.currentColumn].map( (cell, h) => [cell, h] )) {
-                    if (cell.correct) continue;
-
-                    cell.hint = hints[h];
-                }
-                break;
+            cell.hint = hints[h];
         }
     }
 

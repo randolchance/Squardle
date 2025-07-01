@@ -332,7 +332,7 @@ export default class GameGrid {
     }
 
     nextWord() {
-        if (!this.currentCell) return;
+        if (!this.currentCell || this.is_solved) return;
 
         switch (this.direction) {
             case DIRECTIONS.horizontal:
@@ -361,7 +361,7 @@ export default class GameGrid {
     }
 
     previousWord() {
-        if (!this.currentCell) return;
+        if (!this.currentCell || this.is_solved) return;
         
         switch (this.direction) {
             case DIRECTIONS.horizontal:

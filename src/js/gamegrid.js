@@ -358,6 +358,12 @@ export default class GameGrid {
                 break;
         }
 
+        if (!this.currentCell) {
+
+            this.toggleDirection();
+
+        }
+
     }
 
     previousWord() {
@@ -385,6 +391,12 @@ export default class GameGrid {
                 } while (!this.currentCell && i >= 0);
 
                 break;
+        }
+
+        if (!this.currentCell) {
+
+            this.toggleDirection();
+
         }
 
     }

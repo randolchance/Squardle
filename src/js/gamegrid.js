@@ -213,6 +213,8 @@ export default class GameGrid {
                 this.#direction = DIRECTIONS.horizontal;
                 break;
         }
+
+        this.#guessController.select( this.word_index );
     }
 
     clickCell( cell ) {
@@ -243,7 +245,16 @@ export default class GameGrid {
 
         this.#currentCell = cell;
 
-        if (this.#direction & cell.locked) this.toggleDirection();
+        if (this.#direction & cell.locked) {
+            
+            this.toggleDirection();
+        
+        } else {
+
+            this.#guessController.select( this.word_index );
+
+        }
+
         this.enableKeys();
         
     }

@@ -52,7 +52,7 @@ export default class GameGrid {
                         this.submit();
                         break;
                     case 'Backspace':
-                        this.currentCell.clear();
+                        cell.clear();
                         this.previousCell();
                         break;
                     

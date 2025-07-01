@@ -206,10 +206,14 @@ export default class GameGrid {
     toggleDirection() {
         switch (this.#direction) {
             case DIRECTIONS.horizontal:
+                if (this.currentCell.locked & DIRECTIONS.vertical) return;
+
                 this.#direction = DIRECTIONS.vertical;
                 break;
 
             case DIRECTIONS.vertical:
+                if (this.currentCell.locked & DIRECTIONS.horizontal) return;
+
                 this.#direction = DIRECTIONS.horizontal;
                 break;
         }

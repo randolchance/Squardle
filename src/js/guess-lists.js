@@ -37,14 +37,22 @@ export default class GuessLists {
         return this.#vertical;
     }
 
-    guess( word, hints ) {
-        const is_horizontal = this.selected_word_index < this.size;
-        word_index -= is_horizontal ? 0 : this.size;
+    get is_horizontal() {
+        return this.selected_word_index < this.size;
+    }
 
-        const target = (is_horizontal ? this.#horizontal : this.#vertical)[word_index];
-        target.push({ word, hints });
+    get is_vertical() {
+        this.selected_word_index >= this.size;
+    }
+
+    get currentList() {
+        return (this.is_horizontal ? this.#horizontal : this.#vertical)[this.selected_word_index];
+    }
+
+    guess( word, hints ) {
+        this.currentList.push({ word, hints });
         
-        return this.guess_qty - target.length;
+        return this.guess_qty - this.currentList.length;
     }
 
 }

@@ -363,11 +363,6 @@ export default class GameGrid {
             return;
         }
 
-        const word_index = this.#_direction === DIRECTIONS.horizontal ?
-            this.currentRow : this.size + this.currentColumn;
-
-        this.deselectCell();
-
         const params = new URLSearchParams({
             p: this.#puzzle_number,
             i: this.word_index,

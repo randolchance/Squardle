@@ -459,6 +459,7 @@ export default class GameGrid {
             m: this.mode,
         });
 
+        let hints;
         try {
 
             const response = await fetch(`/guess?${params}}`);

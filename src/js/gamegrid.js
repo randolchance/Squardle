@@ -190,7 +190,8 @@ export default class GameGrid {
     }
 
     get word_index() {
-        return this.#direction === DIRECTIONS.horizontal ?
+        if (!this.currentCell) return null;
+
         return this.direction === DIRECTIONS.horizontal ?
             this.currentRowIndex : this.size + this.currentColumnIndex;
     }

@@ -226,6 +226,20 @@ export default class GameGrid {
         return true;
     }
 
+    get currentFirstCell() {
+        return this.currentWordCells.next().value;
+    }
+
+    get currentLastCell() {
+        const { i, j } = this.currentCell;
+        switch (this.direction) {
+            case DIRECTIONS.horizontal:
+                return this.cells[j][0];
+            case DIRECTIONS.vertical:
+                return this.cells[0][i];
+        }
+    }
+
     toggleDirection() {
         switch (this.direction) {
             case DIRECTIONS.horizontal:
@@ -293,8 +307,17 @@ export default class GameGrid {
 
     }
 
-    selectFirstCell() {
-        const cell = this.currentWordCells.next().value;
+    selectCurrentFirstCell() {
+        const { i, j } = this.currentFirstCell;
+
+        this.selectCell( i, j );
+    }
+
+    selectCurrentLastCell() {
+        const { i, j } = this.currentLastCell;
+
+        this.selectCell( i, j );
+    }
         if (!cell) return;
 
         this.selectCell( cell.i, cell.j );
@@ -483,7 +506,7 @@ export default class GameGrid {
 
             this.#invalidWord();
 
-            this.selectFirstCell();
+            this.selectCurrentFirstCell();
 
             return;
         }
@@ -505,7 +528,7 @@ export default class GameGrid {
         
         } else {
 
-            this.selectFirstCell();
+            this.selectCurrentFirstCell();
 
         }
 

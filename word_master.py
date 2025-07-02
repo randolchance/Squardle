@@ -1,6 +1,7 @@
 import json
 import sqlite3
 from enum import IntEnum
+from collections import Counter
 
 from trie import Trie
 
@@ -69,22 +70,35 @@ class WordMaster:
             else "".join([puzzle[j][word_index] for j in span])
         
         # Get all the words in the opposite direction
-        other_words = ["".join([puzzle[j][i] for j in span]) for i in span] \
+        other_answers = ["".join([puzzle[j][i] for j in span]) for i in span] \
             if is_horizontal else puzzle
+
+        letter_count = Counter(word)
         
-        print(answer)
-        
-        hint = [None] * self.word_size
+        hints = [None] * self.word_size
         for i, letter in enumerate(word):
-            hint[i] = generate_letter_hint( letter, i, answer, is_horizontal )
-            for j in span:
-                hint[i] = hint[i] | generate_letter_hint( letter, j, other_words[i], not is_horizontal )
+            hint = Hints.UNUSED
 
-            # If not in easy mode filter out hints about which word (horizontal 
-            # or vertical) the letters are in
-            if not easy_mode:
-                hint[i] = hint[i] & (Hints.IN_WORD | Hints.CORRECT)
+            if letter in letter_count and letter_count[letter] > 0:
+                hint = generate_letter_hint( letter, i, answer, is_horizontal )
+                letter_count[letter] -= 1
 
-        return hint
+            if hint != Hints.CORRECT:
+                # Generate the hint from the letter in the perpendicular word
+                other_word = other_answers[i]
+                other_letter_count = Counter(other_word)
 
-        
+                if letter in other_letter_count and other_letter_count[letter] > 0:
+
+                    hint = hint | generate_letter_hint( letter, word_index, other_word, not is_horizontal )
+                    other_letter_count[letter] -= 1
+
+                # If not in easy mode filter out hints about which word (horizontal 
+                # or vertical) the letters are in
+                if not easy_mode:
+                    hint = hint & Hints.IN_WORD
+
+            hints[i] = hint
+
+        return hints
+

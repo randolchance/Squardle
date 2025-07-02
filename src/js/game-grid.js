@@ -258,7 +258,7 @@ export default class GameGrid {
     }
 
     selectCell( i, j ) {
-        if (i >= this.size || j >= this.size) {
+        if (i < 0 || j < 0 || i >= this.size || j >= this.size) {
             this.deselectCell();
             return;
         }

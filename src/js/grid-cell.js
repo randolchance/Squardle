@@ -109,6 +109,8 @@ export default class GridCell {
 
         this.#content = key.toUpperCase();
 
+        this.hint = null;
+
     }
 
     clear() {
@@ -120,6 +122,8 @@ export default class GridCell {
         }
 
         this.#content = null;
+
+        this.hint = null;
 
     }
 

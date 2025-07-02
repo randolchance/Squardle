@@ -1,6 +1,6 @@
 import json
 import sqlite3
-from enum import Enum
+from enum import IntEnum
 
 from trie import Trie
 
@@ -9,7 +9,7 @@ DATABASE_PATH = "./solutions/puzzles.db"
 PUZZLE_COUNT = 81
 WORD_SIZE = 5
 
-class Hints(Enum):
+class Hints(IntEnum):
     UNUSED = 0
     IN_WORD = 1
     IN_WORD_HORIZONTAL = 3

@@ -46,7 +46,7 @@ class WordMaster:
         return word in self.words.getWords(word)
     
     def getPuzzleIndex(self, p):
-        return (p + 44) * 10 % PUZZLE_COUNT
+        return (p + 44) * 10 % PUZZLE_COUNT + 1
 
     def guess(self, puzzle_index, word_index, word, easy_mode=False):
 

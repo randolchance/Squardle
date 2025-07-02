@@ -17,15 +17,14 @@ export default class GameGrid {
         const { key } = event;
         if (!VALID_KEYS.includes(key)) return;
 
-        const cell = this.currentCell;
-        if (!cell) {
+        if (!this.currentCell) {
             console.warn(`Keydown event is active but no cell is selected!`);
             return;
         }
 
         switch (true) {
             case CHARACTER_KEYS.includes(key):
-                cell.write( key );
+                this.writeCell( key );
                 break;
             case NON_CHARACTER_KEYS.includes(key):
                 switch (key) {
@@ -79,7 +78,7 @@ export default class GameGrid {
                         this.submit();
                         break;
                     case 'Backspace':
-                        cell.clear();
+                        this.clearCell();
                         this.previousCell();
                         break;
                     

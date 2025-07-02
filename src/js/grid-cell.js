@@ -70,9 +70,6 @@ export default class GridCell {
     }
 
     set hint( hint ) {
-        if (!Object.values(HINTS)) {
-            throw new Error(`Invalid hint enum! Given: ${ hint }`);
-        }
 
         if (hint === HINTS.correct) this.#correct = is_correct;
 

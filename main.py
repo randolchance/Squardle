@@ -1,9 +1,12 @@
 from fastapi import FastAPI
+from fastapi.staticfiles import StaticFiles
 
 from word_master import WordMaster
 
 
 app = FastAPI()
+
+app.mount("/", StaticFiles(directory="dist", html=True), name="static")
 
 WORDS = WordMaster()
 

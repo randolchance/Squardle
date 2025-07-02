@@ -92,15 +92,21 @@ export default class GridCell {
     }
 
     lock( direction ) {
+
         this.#locked |= direction;
+
     }
 
     write( key ) {
         if (!CHARACTER_KEYS.includes( key )) {
+
             console.warn(`${ key } is not a valid key to write to a cell`);
+
             return;
         } else if (this.correct) {
+
             this.#warnIsCorrect();
+
             return;
         }
 
@@ -110,7 +116,9 @@ export default class GridCell {
 
     clear() {
         if (this.correct) {
+
             this.#warnIsCorrect();
+            
             return;
         }
 

@@ -6,7 +6,7 @@ import {
     DIRECTIONS,
     HINTS,
     MODES,
-} from 'constants';
+} from './constants';
 
 import GridCell from './grid-cell';
 

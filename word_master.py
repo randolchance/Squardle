@@ -69,10 +69,13 @@ class WordMaster:
         other_words = ["".join([puzzle[j][i] for j in span]) for i in span] \
             if is_horizontal else puzzle
         
+        print(answer)
+        
         hint = [None] * self.word_size
         for i, letter in enumerate(word):
-            hint[i] = generate_letter_hint( letter, i, answer, is_horizontal ) | \
-                generate_letter_hint( letter, i, other_words[i], is_horizontal )
+            hint[i] = generate_letter_hint( letter, i, answer, is_horizontal )
+            for j in span:
+                hint[i] = hint[i] | generate_letter_hint( letter, j, other_words[i], not is_horizontal )
 
             # If not in easy mode filter out hints about which word (horizontal 
             # or vertical) the letters are in

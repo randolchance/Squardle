@@ -199,7 +199,9 @@ export default class GameGrid {
             ? this.currentRow
             : this.currentColumn;
 
-        for (const cell of target) yield cell;
+        return function*() {
+            for (const cell of target) yield cell;
+        }
     }
 
     get current_word() {

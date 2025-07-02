@@ -49,6 +49,10 @@ class WordMaster:
         return (p + 44) * 10 % PUZZLE_COUNT + 1
 
     def guess(self, puzzle_index, word_index, word, easy_mode=False):
+    def guess(self, p, word_index, word, easy_mode=False):
+
+        # Parse p into the database rowid
+        puzzle_index = self.getPuzzleIndex(p)
 
         # word_index param is 0 >= word_index > 2*self.word_size, such that
         # 0 >= word_index > self.word_size is the j index of the horizontal word in 

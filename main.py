@@ -1,14 +1,22 @@
 from fastapi import FastAPI
+from fastapi import Request
 from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates as Templates
 
 from word_master import WordMaster
 
 
+templates = Templates(directory="dist")
+
 app = FastAPI()
 
-app.mount("/", StaticFiles(directory="dist", html=True), name="static")
+app.mount("/assets", StaticFiles(directory="dist/assets"), name="static")
 
 WORDS = WordMaster()
+
+@app.get("/")
+async def index(request: Request):
+    return templates.TemplateResponse("index.html",{"request": request})
 
 @app.get("/words")
 async def query_words(q: str):

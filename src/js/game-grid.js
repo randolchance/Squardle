@@ -229,10 +229,14 @@ export default class GameGrid {
     }
 
     get currentFirstCell() {
+        if (!this.currentCell) return;
+
         return this.currentWordCells.next().value;
     }
 
     get currentLastCell() {
+        if (!this.currentCell) return;
+        
         const { i, j } = this.currentCell;
         switch (this.direction) {
             case DIRECTIONS.horizontal:

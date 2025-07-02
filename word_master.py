@@ -48,7 +48,6 @@ class WordMaster:
     def getPuzzleIndex(self, p):
         return (p + 44) * 10 % PUZZLE_COUNT + 1
 
-    def guess(self, puzzle_index, word_index, word, easy_mode=False):
     def guess(self, p, word_index, word, easy_mode=False):
 
         # Parse p into the database rowid

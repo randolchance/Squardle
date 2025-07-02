@@ -318,9 +318,35 @@ export default class GameGrid {
 
         this.selectCell( i, j );
     }
+
+    writeCell( key ) {
+        const cell = this.currentCell;
         if (!cell) return;
 
-        this.selectCell( cell.i, cell.j );
+        cell.write( key );
+
+        if (cell === this.currentLastCell) {
+
+            this.submit();
+        
+        } else {
+
+            this.nextCell();
+
+        }
+    }
+
+    clearCell() {
+        const cell = this.currentCell;
+        if (!cell) return;
+
+        cell.clear();
+
+        if (cell !== this.currentFirstCell) {
+
+            this.previousCell();
+
+        }
     }
     
     enableKeys() {

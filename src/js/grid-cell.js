@@ -1,5 +1,4 @@
-import { CHARACTER_KEYS } from 'constants';
-import { DIRECTIONS, HINTS } from './constants';
+import { CHARACTER_KEYS, DIRECTIONS, HINTS } from './constants';
 
 export default class GridCell {
 
@@ -117,7 +116,7 @@ export default class GridCell {
         if (this.correct) {
 
             this.#warnIsCorrect();
-            
+
             return;
         }
 

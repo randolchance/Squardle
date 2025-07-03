@@ -28,10 +28,10 @@ def get_puzzle( number ):
     return parse_puzzle_string( puzzle_string )
 
 def generate_letter_hint( letter, index, answer, is_horizontal ):
-    if ((i := answer.find(letter)) == -1):
-        return Hints.UNUSED
-    elif (i == index):
+    if (answer[index] == letter):
         return Hints.CORRECT
+    elif (answer.find(letter) == -1):
+        return Hints.UNUSED
     else:
         return Hints.IN_WORD_HORIZONTAL if is_horizontal else Hints.IN_WORD_VERTICAL
 

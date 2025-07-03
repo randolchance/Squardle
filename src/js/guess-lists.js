@@ -1,4 +1,4 @@
-import { DEFAULT_GRID_SIZE, HINTS } from "./constants";
+import { DEFAULT_GRID_SIZE } from "./constants";
 
 
 export default class GuessLists {

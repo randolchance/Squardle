@@ -15,3 +15,17 @@ const props = defineProps({
         </div>
     </div>
 </template>
+
+<style scoped>
+
+.grid {
+    display: flex;
+    flex-direction: column;
+}
+
+.grid-row {
+    display: flex;
+    flex-direction: row;
+}
+
+</style>

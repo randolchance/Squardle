@@ -2,15 +2,6 @@ import { CHARACTER_KEYS, DIRECTIONS, HINTS } from './constants';
 
 export default class GridCell {
 
-    /* Bindables */
-    static onClick( event ) {
-        event.preventDefault();
-
-        this.keysEnabled = true;
-        
-        this.grid.clickCell( this );
-    }
-
     /* Private instance properties */
     #i;
     #j;
@@ -87,6 +78,11 @@ export default class GridCell {
         return this === this.grid.currentCell;
     }
 
+    onClick( event ) {
+        
+        this.grid.clickCell( this );
+
+    }
     lock( direction ) {
 
         this.#locked |= direction;

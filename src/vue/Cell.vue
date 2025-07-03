@@ -24,11 +24,11 @@ const classes = computed(()=>{
     const column_selected_start = !is_horizontal && cell === currentFirstCell
     const column_selected_end = !is_horizontal && cell === currentLastCell
     return {
-        'cell-selected': selected,
-        'row-selected': row_selected,
+        'selected': selected,
+        'row-selected-middle': row_selected,
         'row-selected-start': row_selected_start,
         'row-selected-end': row_selected_end,
-        'column-selected': column_selected,
+        'column-selected-middle': column_selected,
         'column-selected-start': column_selected_start,
         'column-selected-end': column_selected_end,
     }
@@ -42,6 +42,8 @@ const classes = computed(()=>{
         <Letter :content="cell.content" :hint="cell.hint"/>
     </div>
 </template><style>
+
+<style>
 
 .cell {
     width: calc( 11 * var(--pixel-size-x) );
@@ -78,3 +80,5 @@ const classes = computed(()=>{
     border-style: none var(--selected-border-style) var(--selected-border-style) var(--selected-border-style);
     padding: var(--pixel-size-y) 0 0 0;
 }
+
+</style>

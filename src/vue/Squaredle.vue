@@ -7,8 +7,8 @@ import GameGrid from "../js/game-grid"
 import GuessLists from "../js/guess-lists"
 
 
-const grid = new GameGrid(1)
 const guessLists = new GuessLists(6)
+const grid = new GameGrid(guessLists, 1)
 
 
 

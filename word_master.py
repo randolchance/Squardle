@@ -73,7 +73,7 @@ class WordMaster:
         other_answers = ["".join([puzzle[j][i] for j in span]) for i in span] \
             if is_horizontal else puzzle
 
-        letter_count = Counter(word)
+        letter_count = Counter(answer)
         
         hints = [None] * self.word_size
         for i, letter in enumerate(word):

@@ -29,8 +29,8 @@ const status = computed(() => {
 
 <template>
     <div class="content" :class="status">
-        <div class="pixel-row" v-for="(row, j) in LETTERS[props.content]" :data-j="j-1" >
-            <div class="pixel" v-for="(pixel, i) in row" :data-i="i-1" :class="pixel != ' ' ? 'on' : 'off'" ></div>
+        <div class="pixel-row" v-for="(row, j) in LETTERS[props.content]" :data-j="j" >
+            <div class="pixel" v-for="(pixel, i) in row" :data-i="i" :class="pixel != ' ' ? 'on' : 'off'" ></div>
         </div>
     </div>
 </template>

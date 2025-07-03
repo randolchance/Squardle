@@ -2,7 +2,7 @@
 import { computed } from 'vue';
 import Letter from './Letter.vue';
 
-import { DIRECTIONS } from './constants';
+import { DIRECTIONS } from '../js/constants';
 
 
 const props = defineProps({

@@ -3,8 +3,8 @@
 import Grid from "./Grid.vue"
 import Guesses from "./Guesses.vue"
 
-import GameGrid from "./game-grid"
-import GuessLists from "./guess-lists"
+import GameGrid from "../js/game-grid"
+import GuessLists from "../js/guess-lists"
 
 
 const grid = new GameGrid(1)

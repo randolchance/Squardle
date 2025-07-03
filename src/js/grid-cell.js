@@ -31,7 +31,6 @@ export default class GridCell {
 
         this.#hint = null;
 
-        this.onClick = GridCell.onClick.bind(this);
 
     }
 

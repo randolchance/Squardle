@@ -12,93 +12,6 @@ import GridCell from './grid-cell';
 
 
 export default class GameGrid {
-
-    static onKeydown( event ) {
-        const { key } = event;
-        if (!VALID_KEYS.includes(key)) return;
-
-        if (!this.currentCell) {
-            console.warn(`Keydown event is active but no cell is selected!`);
-            return;
-        }
-
-        switch (true) {
-            case CHARACTER_KEYS.includes(key):
-                this.writeCell( key );
-                break;
-            case NON_CHARACTER_KEYS.includes(key):
-                switch (key) {
-                    case 'Tab':
-                        this.toggleDirection();
-                        break;
-                    case 'Escape':
-                        this.deselectCell();
-                        break;
-                    case 'ArrowUp':
-                        switch (this.direction) {
-                            case DIRECTIONS.horizontal:
-                                this.previousWord();
-                                break;
-                            case DIRECTIONS.vertical:
-                                this.previousCell();
-                                break;
-                        }
-                        break;
-                    case 'ArrowRight':
-                        switch (this.direction) {
-                            case DIRECTIONS.horizontal:
-                                this.nextCell();
-                                break;
-                            case DIRECTIONS.vertical:
-                                this.nextWord();
-                                break;
-                        }
-                        break;
-                    case 'ArrowDown':
-                        switch (this.direction) {
-                            case DIRECTIONS.horizontal:
-                                this.nextWord();
-                                break;
-                            case DIRECTIONS.vertical:
-                                this.nextCell();
-                                break;
-                        }
-                        break;
-                    case 'ArrowLeft':
-                        switch (this.direction) {
-                            case DIRECTIONS.horizontal:
-                                this.previousCell();
-                                break;
-                            case DIRECTIONS.vertical:
-                                this.previousWord();
-                                break;
-                        }
-                        break;
-                    case 'Enter':
-                        this.submit();
-                        break;
-                    case 'Backspace':
-                        this.clearCell();
-                        this.previousCell();
-                        break;
-                    
-                }
-                break;
-        }
-    }
-
-    /* Private instance properties */
-    #guessController;
-    #puzzle_number;
-    #mode;
-
-    #disabled;
-
-    #size;
-    #cells;
-    #currentCell;
-    #direction;
-
     constructor( guessController, puzzle_number, mode=MODES.normal, size=DEFAULT_GRID_SIZE ) {
         if (typeof size !== 'number') {
             throw new Error(`size is not a number! Given: ${size}`);
@@ -127,8 +40,6 @@ export default class GameGrid {
         this.#cells = cells;
         this.#currentCell = null;
         this.#direction = DIRECTIONS.horizontal;
-
-        this.onKeydown = GameGrid.onKeydown.bind(this);
 
     }
 
@@ -243,6 +154,81 @@ export default class GameGrid {
                 return this.cells[j][0];
             case DIRECTIONS.vertical:
                 return this.cells[0][i];
+        }
+    }
+
+    onKeydown( event ) {
+        const { key } = event;
+        console.log(key);
+        if (!VALID_KEYS.includes(key)) return;
+
+        if (!this.currentCell) {
+            console.warn(`Keydown event is active but no cell is selected!`);
+            return;
+        }
+
+        switch (true) {
+            case CHARACTER_KEYS.includes(key):
+                this.writeCell( key );
+                break;
+            case NON_CHARACTER_KEYS.includes(key):
+                switch (key) {
+                    case 'Tab':
+                        this.toggleDirection();
+                        break;
+                    case 'Escape':
+                        this.deselectCell();
+                        break;
+                    case 'ArrowUp':
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.previousWord();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.previousCell();
+                                break;
+                        }
+                        break;
+                    case 'ArrowRight':
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.nextCell();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.nextWord();
+                                break;
+                        }
+                        break;
+                    case 'ArrowDown':
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.nextWord();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.nextCell();
+                                break;
+                        }
+                        break;
+                    case 'ArrowLeft':
+                        switch (this.direction) {
+                            case DIRECTIONS.horizontal:
+                                this.previousCell();
+                                break;
+                            case DIRECTIONS.vertical:
+                                this.previousWord();
+                                break;
+                        }
+                        break;
+                    case 'Enter':
+                        this.submit();
+                        break;
+                    case 'Backspace':
+                        this.clearCell();
+                        this.previousCell();
+                        break;
+                    
+                }
+                break;
         }
     }
 

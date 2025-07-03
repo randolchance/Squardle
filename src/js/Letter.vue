@@ -1,6 +1,7 @@
 <script setup>
-import { computed } from 'vue';
-import { HINTS } from './constants';
+import { computed } from 'vue'
+import { HINTS } from './constants'
+import { LETTERS } from './letters'
 
 const props = defineProps({
     content: String,

@@ -15,13 +15,16 @@ const grid = new GameGrid(guessLists, 1)
 </script>
 
 <template>
-    <div class="guess-lists-container">
-        <Guesses :guessLists="guessLists"/>
-    </div>
-    <div class="grid-container">
-        <Grid :grid="grid"/>
+    <div class="squardle">
+        <div class="guess-lists-container">
+            <Guesses :guessLists="guessLists"/>
+        </div>
+        <div class="grid-container">
+            <Grid :grid="grid"/>
+        </div>
     </div>
 </template>
+
 <style>
 
 :root {

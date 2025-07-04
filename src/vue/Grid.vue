@@ -28,7 +28,6 @@ function makeCell( i, j ) {
         content: '_',
         locked: DIRECTIONS.neither,
         selected: false,
-        correct: false,
         hint: null,
     }
 }
@@ -100,7 +99,7 @@ const word_index = computed(()=>{
 const is_solved = computed(()=>{
     for (const row of cells) {
         for (const cell of row) {
-            if (!cell.correct) return false
+            if (!cell.hint === HINTS.correct) return false
         }
     }
     return true
@@ -245,7 +244,7 @@ function selectCell( i, j ) {
     if (i < 0 || j < 0 || i >= size || j >= size) return
 
     const cell = cells[j][i]
-    if (cell.correct || cell.locked === DIRECTIONS.both) return
+    if (cell.hint === HINTS.correct || cell.locked === DIRECTIONS.both) return
 
     currentCell.cell = cell
 
@@ -528,7 +527,6 @@ function invalidWord() {
 
 function parseHints( hints ) {
     for (const [cell, h] of [...getCurrentWordCells()].map( (cell, h) => [cell, h] )) {
-        if (cell.correct) continue
 
         cell.hint = hints[h]
     }

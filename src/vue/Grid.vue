@@ -9,11 +9,11 @@ const props = defineProps({
 </script>
 
 <template>
-    <div class="grid" :disabled="grid.disabled" @keydown.prevent="grid.onKeydown">
-        <div class="grid-row" v-for="j in grid.size">
-            <Cell v-for="i in grid.size" :data-i="i-1" :data-j="j-1" :cell="grid.cells[j-1][i-1]"/>
+    <button class="grid" @keydown.prevent="onKeydown">
+        <div class="grid-row" v-for="(row, j) in cells">
+            <Cell v-for="(cell, i) in row" :class="classes[j][i]" :cell="cell" @click.prevent="()=>onClick(i,j)"/>
         </div>
-    </div>
+    </button>
 </template>
 
 <style scoped>

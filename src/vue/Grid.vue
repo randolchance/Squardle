@@ -30,7 +30,6 @@ function makeCell( i, j ) {
         selected: false,
         correct: false,
         hint: null,
-        keysDisabled: true,
     }
 }
 
@@ -248,8 +247,6 @@ function selectCell( i, j ) {
     const cell = cells[j][i]
     if (cell.correct || cell.locked === DIRECTIONS.both) return
 
-    disableKeys()
-
     currentCell.cell = cell
 
     cell.selected = true
@@ -263,8 +260,6 @@ function selectCell( i, j ) {
         guessController.selected_word_index = word_index.value
 
     }
-
-    enableKeys()
     
 }
 
@@ -294,7 +289,7 @@ function writeCell( key ) {
 
     cell.content = key
 
-    if (cell === getCurrentLastCell()) {
+    if (cell === getCurrentLastCell() && current_word.value) {
 
         submit()
     
@@ -316,22 +311,6 @@ function clearCell() {
         previousCell()
 
     }
-}
-
-function enableKeys() {
-    if (!currentCell.cell) return
-
-    console.log(`Keys enabled on ${currentCell.cell.i},${currentCell.cell.j}`)
-
-    currentCell.cell.keysDisabled = false
-
-    console.log(currentCell.cell)
-}
-
-function disableKeys() {
-    if (!currentCell.cell) return
-
-    currentCell.cell.keysDisabled = true
 }
 
 function nextCell() {

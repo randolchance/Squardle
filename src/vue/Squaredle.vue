@@ -28,7 +28,7 @@ const grid = new GameGrid(guessLists, 1)
 <style>
 
 :root {
-    --pixel-size: 1vw;
+    --pixel-size: 14px;
 
     --pixel-size-x: var(--pixel-size);
     --pixel-size-y: var(--pixel-size);

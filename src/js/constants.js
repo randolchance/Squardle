@@ -27,7 +27,7 @@ export const HINTS = {
     inWord: 1,
     inWordHorizontal: 3,
     inWordVertical: 5,
-    inBoth: 7,
+    inWordBoth: 7,
     correct: 8,
 }
 

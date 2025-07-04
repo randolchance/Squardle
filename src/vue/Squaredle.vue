@@ -45,6 +45,12 @@ body {
     background-color: #111111;
 }
 
+button, button:focus {
+    border: none;
+    background-color: transparent;
+    outline: none;
+}
+
 .squardle {
     display: flex;
     flex-direction: row;

@@ -3,24 +3,16 @@
 import Grid from "./Grid.vue"
 import Guesses from "./Guesses.vue"
 
-import GameGrid from "../js/game-grid"
-import GuessLists from "../js/guess-lists"
-
-
-const guessLists = new GuessLists(6)
-const grid = new GameGrid(guessLists, 1)
-
-
 
 </script>
 
 <template>
     <div class="squardle">
         <div class="guess-lists-container">
-            <Guesses :guessLists="guessLists"/>
+            <Guesses/>
         </div>
         <div class="grid-container">
-            <Grid :grid="grid"/>
+            <Grid :puzzle_number="1" :mode="0"/>
         </div>
     </div>
 </template>

@@ -1,9 +1,590 @@
 <script setup>
+import { ref, toRef, computed, reactive } from 'vue'
+import Cell from './Cell.vue'
 
-import Cell from "./Cell.vue"
+import {
+    DEFAULT_GRID_SIZE,
+    CHARACTER_KEYS,
+    NON_CHARACTER_KEYS,
+    VALID_KEYS,
+    DIRECTIONS,
+    HINTS,
+    MODES,
+} from '../js/constants'
 
 const props = defineProps({
-  grid: Object,
+    puzzle_number: Number,
+    mode: Number,
+    guessController: Object,
+
+    disabled: Boolean,
+})
+
+const size = DEFAULT_GRID_SIZE
+
+function makeCell( i, j ) {
+    return {
+        i, j,
+        content: '_',
+        locked: DIRECTIONS.neither,
+        selected: false,
+        correct: false,
+        hint: null,
+        keysDisabled: true,
+    }
+}
+
+const cells = reactive((()=>{
+    const cells = []
+    for (let j = 0; j < size; j++) {
+        const row = []
+        for (let i = 0; i < size; i++) {
+            row.push( makeCell( i, j ) )
+        }
+        cells.push( row )
+    }
+    return cells
+})())
+
+const direction = ref(DIRECTIONS.horizontal)
+const currentCell = reactive({ cell: null })
+
+
+function getCurrentRowIndex() {
+    return currentCell.cell ? currentCell.cell.j : null
+}
+
+function getCurrentColumnIndex() {
+    return currentCell.cell ? currentCell.cell.i : null
+}
+
+function* getCurrentRow() {
+    if (!currentCell.cell) return
+
+    const currentRowIndex = getCurrentRowIndex()
+    for (let i = 0; i < size; i++) {
+        yield cells[currentRowIndex][i]
+    }
+}
+
+function* getCurrentColumn() {
+    if (!currentCell.cell) return
+
+    const currentColumnIndex = getCurrentColumnIndex()
+    for (let j = 0; j < size; j++) {
+        yield cells[j][currentColumnIndex]
+    }
+}
+
+function* getCurrentWordCells() {
+    const target = direction.value === DIRECTIONS.horizontal
+        ? getCurrentRow()
+        : getCurrentColumn()
+
+    for (const cell of target) yield cell
+}
+
+const current_word = computed(()=>{
+    let word = ''
+    for (const cell of getCurrentWordCells()) word += cell.content
+
+    return word
+})
+
+const word_index = computed(()=>{
+    if (!currentCell.cell) return
+
+    return direction.value === DIRECTIONS.horizontal ?
+        getCurrentRowIndex() : size + getCurrentColumnIndex()
+})
+
+const is_solved = computed(()=>{
+    for (const row of cells) {
+        for (const cell of row) {
+            if (!cell.correct) return false
+        }
+    }
+    return true
+})
+
+function getCurrentFirstCell() {
+    if (!currentCell.cell) return null
+    
+    const { i, j } = currentCell.cell
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+            return cells[j][0]
+        case DIRECTIONS.vertical:
+            return cells[0][i]
+    }
+}
+
+function getCurrentLastCell() {
+    if (!currentCell.cell) return null
+    
+    const { i, j } = currentCell.cell
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+            return cells[j][size-1]
+        case DIRECTIONS.vertical:
+            return cells[size-1][i]
+    }
+}
+
+function onKeydown( event ) {
+    const { key } = event
+    console.log(key)
+    if (!VALID_KEYS.includes(key)) return
+
+    if (!currentCell.cell) {
+        console.warn(`Keydown event is active but no cell is selected!`)
+        return
+    }
+
+    switch (true) {
+        case CHARACTER_KEYS.includes(key):
+            writeCell( key )
+            break
+        case NON_CHARACTER_KEYS.includes(key):
+            switch (key) {
+                case 'Tab':
+                    toggleDirection()
+                    break
+                case 'Escape':
+                    deselectCell()
+                    break
+                case 'ArrowUp':
+                    switch (direction.value) {
+                        case DIRECTIONS.horizontal:
+                            previousWord()
+                            break
+                        case DIRECTIONS.vertical:
+                            previousCell()
+                            break
+                    }
+                    break
+                case 'ArrowRight':
+                    switch (direction.value) {
+                        case DIRECTIONS.horizontal:
+                            nextCell()
+                            break
+                        case DIRECTIONS.vertical:
+                            nextWord()
+                            break
+                    }
+                    break
+                case 'ArrowDown':
+                    switch (direction.value) {
+                        case DIRECTIONS.horizontal:
+                            nextWord()
+                            break
+                        case DIRECTIONS.vertical:
+                            nextCell()
+                            break
+                    }
+                    break
+                case 'ArrowLeft':
+                    switch (direction.value) {
+                        case DIRECTIONS.horizontal:
+                            previousCell()
+                            break
+                        case DIRECTIONS.vertical:
+                            previousWord()
+                            break
+                    }
+                    break
+                case 'Enter':
+                    submit()
+                    break
+                case 'Backspace':
+                    clearCell()
+                    previousCell()
+                    break
+                
+            }
+            break
+    }
+}
+
+function toggleDirection() {
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+            if (currentCell.cell.locked & DIRECTIONS.vertical) return
+
+            direction.value = DIRECTIONS.vertical
+            break
+
+        case DIRECTIONS.vertical:
+            if (currentCell.cell.locked & DIRECTIONS.horizontal) return
+
+            direction.value = DIRECTIONS.horizontal
+            break
+    }
+
+    const current_word_index = guessController.selected_word_index
+    guessController.selected_word_index = (current_word_index + size) % (2 * current_word_index)
+
+}
+
+function onClick( i, j ) {
+    const cell = cells[j][i]
+    if (cell === currentCell.cell) {
+
+        toggleDirection()
+
+    } else {
+
+        selectCell( i, j )
+
+    }
+}
+
+function selectCell( i, j ) {
+    
+    if (currentCell.cell) deselectCell()
+
+    if (i < 0 || j < 0 || i >= size || j >= size) return
+
+    const cell = cells[j][i]
+    if (cell.correct || cell.locked === DIRECTIONS.both) return
+
+    disableKeys()
+
+    currentCell.cell = cell
+
+    cell.selected = true
+
+    if (direction.value & cell.locked) {
+        
+        toggleDirection()
+    
+    } else {
+
+        guessController.selected_word_index = word_index.value
+
+    }
+
+    enableKeys()
+    
+}
+
+function deselectCell() {
+
+    currentCell.cell.selected = false
+
+    currentCell.cell = null
+
+}
+
+function selectCurrentFirstCell() {
+    const { i, j } = getCurrentFirstCell()
+
+    selectCell( i, j )
+}
+
+function selectCurrentLastCell() {
+    const { i, j } = getCurrentLastCell()
+
+    selectCell( i, j )
+}
+
+function writeCell( key ) {
+    const cell = currentCell.cell
+    if (!cell) return
+
+    cell.content = key
+
+    if (cell === getCurrentLastCell()) {
+
+        submit()
+    
+    } else {
+
+        nextCell()
+
+    }
+}
+
+function clearCell() {
+    const cell = currentCell.cell
+    if (!cell) return
+
+    cell.content = '_'
+
+    if (cell !== getCurrentFirstCell()) {
+
+        previousCell()
+
+    }
+}
+
+function enableKeys() {
+    if (!currentCell.cell) return
+
+    console.log(`Keys enabled on ${currentCell.cell.i},${currentCell.cell.j}`)
+
+    currentCell.cell.keysDisabled = false
+
+    console.log(currentCell.cell)
+}
+
+function disableKeys() {
+    if (!currentCell.cell) return
+
+    currentCell.cell.keysDisabled = true
+}
+
+function nextCell() {
+    if (!currentCell.cell) return
+
+    let j = getCurrentRowIndex()
+    let i = getCurrentColumnIndex()
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+            for (i += 1; i < size; i++) {
+                if (!cells[j][i].disabled) break
+            }
+            break
+
+        case DIRECTIONS.vertical:
+            for (j += 1; j < size; j++) {
+                if (!cells[j][i].disabled) break
+            }
+            break
+    }
+    
+    selectCell( i, j )
+
+    if (!currentCell.cell) nextWord()
+
+}
+
+function previousCell() {
+    if (!currentCell.cell) return
+
+    let j = getCurrentRowIndex()
+    let i = getCurrentColumnIndex()
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+            for (i -= 1; i >= 0; i--) {
+                if (!cells[j][i].disabled) break
+            }
+            break
+
+        case DIRECTIONS.vertical:
+            for (j -= 1; j >= 0; j--) {
+                if (!cells[j][i].disabled) break
+            }
+            break
+    }
+    
+    selectCell( i, j )
+
+    if (!currentCell.cell) previousWord()
+
+}
+
+function nextWord() {
+    if (!currentCell.cell || is_solved) return
+
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+
+            let j = getCurrentRowIndex() + 1
+            do {
+
+                selectCell( 0, j++ )
+
+            } while (!currentCell.cell && j < size)
+
+            break
+
+        case DIRECTIONS.vertical:
+
+            let i = getCurrentColumnIndex() + 1
+            do {
+
+                selectCell( 0, i++ )
+
+            } while (!currentCell.cell && i < size)
+
+            break
+    }
+
+    if (!currentCell.cell) {
+
+        toggleDirection()
+
+    }
+
+}
+
+function previousWord() {
+    if (!currentCell.cell || is_solved) return
+    
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+
+            let j = getCurrentRowIndex() - 1
+            do {
+
+                selectCell( 0, j-- )
+
+            } while (!currentCell.cell && j >= 0)
+
+            break
+
+        case DIRECTIONS.vertical:
+
+            let i = getCurrentColumnIndex() - 1
+            do {
+
+                selectCell( i--, 0 )
+
+            } while (!currentCell.cell && i >= 0)
+
+            break
+    }
+
+    if (!currentCell.cell) {
+
+        toggleDirection()
+
+    }
+
+}
+
+function lockWord() {
+
+    for (const cell of getCurrentWordCells()) cell.lock( direction.value ^ DIRECTIONS.both )
+
+}
+
+async function submit() {
+    if (!current_word.value) {
+
+        incompleteWord()
+
+        return
+    }
+
+    const params = new URLSearchParams({
+        p: props.puzzle_number,
+        i: word_index.value,
+        word: current_word.value,
+        m: props.mode,
+    })
+
+    let hints
+    try {
+
+        const response = await fetch(`/guess?${params}`)
+
+        if (!response.ok) {
+            throw new Error(`Response status: ${response.status}`)
+        }
+
+        hints = await response.json()
+
+    } catch (e) {
+
+        console.error(e.message)
+
+        // Do something with the error and pass it to error
+
+        error()
+
+        return
+    }
+
+    if (!hints) {
+
+        invalidWord()
+
+        selectCurrentFirstCell()
+
+        return
+    }
+
+    parseHints( hints )
+
+    const correct_guess = hints.every( hint => hint === HINTS.correct )
+
+    const remaining_guesses = guessController.guess( current_word.value, hints )
+    if (remaining_guesses == 0) {
+
+        lockWord()
+
+        nextWord()
+    
+    } else if (correct_guess) {
+        
+        nextWord()
+    
+    } else {
+
+        selectCurrentFirstCell()
+
+    }
+
+    if (!currentCell.cell) {
+
+        // Win condition because there are no words left to select
+
+    }
+    
+}
+
+function error() {
+
+}
+
+function incompleteWord() {
+
+}
+
+function invalidWord() {
+
+}
+
+function parseHints( hints ) {
+    for (const [cell, h] of [...getCurrentWordCells()].map( (cell, h) => [cell, h] )) {
+        if (cell.correct) continue
+
+        cell.hint = hints[h]
+    }
+}
+
+const classes = computed(()=>{
+    const is_horizontal = direction.value === DIRECTIONS.horizontal
+    const currentFirstCell = getCurrentFirstCell()
+    const currentLastCell = getCurrentLastCell()
+    const currentRowIndex = getCurrentRowIndex()
+    const currentColumnIndex = getCurrentColumnIndex()
+    return cells.map((row)=>{
+        return row.map((cell)=>{
+            const { selected, i, j } = cell
+            const row_selected = is_horizontal && j === currentRowIndex
+            const row_selected_start = is_horizontal && cell === currentFirstCell
+            const row_selected_end = is_horizontal && cell === currentLastCell
+            const row_selected_middle = is_horizontal && row_selected && !row_selected_start && !row_selected_end
+            const column_selected = !is_horizontal && i === currentColumnIndex
+            const column_selected_start = !is_horizontal && cell === currentFirstCell
+            const column_selected_end = !is_horizontal && cell === currentLastCell
+            const column_selected_middle = !is_horizontal && column_selected && !column_selected_start && !column_selected_end
+            return {
+                'selected': selected,
+                'row-selected': row_selected,
+                'row-selected-start': row_selected_start,
+                'row-selected-middle': row_selected_middle,
+                'row-selected-end': row_selected_end,
+                'column-selected': column_selected,
+                'column-selected-start': column_selected_start,
+                'column-selected-middle': column_selected_middle,
+                'column-selected-end': column_selected_end,
+            }
+        })
+    })
 })
 
 </script>

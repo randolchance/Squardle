@@ -14,11 +14,13 @@ const status = computed(() => {
         case HINTS.correct:
             return 'correct'
         case HINTS.inWord:
-            return 'inWord'
+            return 'in-word'
         case HINTS.inWordHorizontal:
-            return 'inWordHorizontal'
+            return 'in-word-horizontal'
         case HINTS.inWordVertical:
-            return 'inWordVertical'
+            return 'in-word-vertical'
+        case HINTS.inWordBoth:
+            return 'in-word-both'
         default:
             return ''
     }

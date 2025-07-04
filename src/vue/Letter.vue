@@ -41,12 +41,17 @@ const status = computed(() => {
     display: flex;
     flex-direction: column;
 
-    width: calc( 9 * var(--pixel-size-x) );
-    height: calc( 9 * var(--pixel-size-y) );
+    width: calc( 7 * var(--pixel-size-x) );
+    height: calc( 7 * var(--pixel-size-y) );
 
     border-style: solid;
     border-width: var(--pixel-size-y) var(--pixel-size-x) var(--pixel-size-y) var(--pixel-size-x);
     border-color: #222222;
+}
+
+.selected .content {
+    border-color: var(--selected-color);
+    background-color: var(--selected-color);
 }
 
 .pixel-row {
@@ -59,12 +64,20 @@ const status = computed(() => {
     height: var(--pixel-size-y);
 }
 
-.cell.selected .pixel.off {
+.pixel.off {
+    background-color: transparent;
+}
+
+.pixel.on {
     background-color: var(--selected-color);
 }
 
-.cell.selected .pixel.on {
-    background-color: transparent;
+.selected .pixel.off {
+    background-color: var(--selected-color);
+}
+
+.selected .pixel.on {
+    background-color: black;
 }
 
 .content.correct .pixel.off {

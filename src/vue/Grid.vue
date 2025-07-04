@@ -16,7 +16,7 @@ const props = defineProps({
     </button>
 </template>
 
-<style scoped>
+<style>
 
 .grid {
     display: flex;

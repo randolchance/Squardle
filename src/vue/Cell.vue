@@ -46,14 +46,16 @@ const classes = computed(()=>{
 <style>
 
 .cell {
-    width: calc( 11 * var(--pixel-size-x) );
-    height: calc( 11 * var(--pixel-size-y) );
+    width: calc( 9 * var(--pixel-size-x) );
+    height: calc( 9 * var(--pixel-size-y) );
+    border-color: var(--selected-color);
     border-width: var(--pixel-size-y) var(--pixel-size-x) var(--pixel-size-y) var(--pixel-size-x);
+    padding: var(--pixel-size-y) var(--pixel-size-x) var(--pixel-size-y) var(--pixel-size-x);
 }
 
 .cell.row-selected-start {
-    border-style: var(--selected-border-style) var(--selected-border-style) var(--selected-border-style) none;
-    padding: 0 0 0 var(--pixel-size-x);
+    border-style: var(--selected-border-style) none var(--selected-border-style) var(--selected-border-style);
+    padding: 0 var(--pixel-size-x) 0 0;
 }
 
 .cell.row-selected-middle {
@@ -62,8 +64,8 @@ const classes = computed(()=>{
 }
 
 .cell.row-selected-end {
-    border-style: var(--selected-border-style) none var(--selected-border-style) var(--selected-border-style);
-    padding: 0 var(--pixel-size-x) 0 0;
+    border-style: var(--selected-border-style) var(--selected-border-style) var(--selected-border-style) none;
+    padding: 0 0 0 var(--pixel-size-x);
 }
 
 .cell.column-selected-start {

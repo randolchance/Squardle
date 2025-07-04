@@ -49,6 +49,10 @@ const status = computed(() => {
     border-color: #222222;
 }
 
+.content.correct {
+    border-color: var(--correct-color);
+}
+
 .selected .content {
     border-color: var(--selected-color);
     background-color: var(--selected-color);

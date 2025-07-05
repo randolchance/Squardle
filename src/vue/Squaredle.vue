@@ -27,10 +27,10 @@ import Guesses from "./Guesses.vue"
 
     --selected-color: white;
     --correct-color: forestgreen;
-    --in-word: gold;
-    --in-word-horizontal: gold;
-    --in-word-vertical: deepskyblue;
-    --in-word-both: darkviolet;
+    --in-word-color: gold;
+    --in-word-horizontal-color: gold;
+    --in-word-vertical-color: deepskyblue;
+    --in-word-both-color: darkviolet;
 
     --selected-border-style: solid;
 

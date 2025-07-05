@@ -55,6 +55,22 @@ const status = computed(() => {
     border-color: var(--correct-color);
 }
 
+.content.in-word {
+    border-color: var(--in-word-color);
+}
+
+.content.in-word-horizontal {
+    border-color: var(--in-word-horizontal-color);
+}
+
+.content.in-word-vertical {
+    border-color: var(--in-word-vertical-color);
+}
+
+.content.in-word-both {
+    border-color: var(--in-word-both-color);
+}
+
 .selected .content {
     border-color: var(--selected-color);
     background-color: var(--selected-color);
@@ -78,10 +94,6 @@ const status = computed(() => {
     background-color: var(--selected-color);
 }
 
-.selected .pixel.off {
-    background-color: var(--selected-color);
-}
-
 .selected .pixel.on {
     background-color: black;
 }
@@ -90,8 +102,32 @@ const status = computed(() => {
     background-color: var(--correct-color);
 }
 
-.content.correct .pixel.on {
-    background-color: transparent;
+.content.in-word .pixel.off {
+    background-color: var(--in-word-color);
+}
+
+.content.in-word-horizontal .pixel.off {
+    background-color: var(--in-word-horizontal-color);
+}
+
+.content.in-word-vertical .pixel.off {
+    background-color: var(--in-word-vertical-color);
+}
+
+.content.in-word-both .pixel.off {
+    background-color: var(--in-word-both-color);
+}
+
+.selected .pixel.off {
+    background-color: var(--selected-color);
+}
+
+.content.correct .pixel.on,
+.content.in-word .pixel.on,
+.content.in-word-horizontal .pixel.on,
+.content.in-word-vertical .pixel.on,
+.content.in-word-both .pixel.on {
+    background-color: black;
 }
 
 </style>

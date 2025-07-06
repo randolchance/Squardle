@@ -52,4 +52,18 @@ button, button:focus {
     flex-direction: row;
 }
 
+.guess-lists-container.closed {
+    height: 100%;
+}
+
+.guess-lists-container {
+    width: 25vw;
+    height: 100vh;
+}
+
+.grid-container {
+    width: 100%;
+    height: 100%;
+}
+
 </style>

@@ -106,7 +106,7 @@ const word_index = computed(()=>{
 const is_solved = computed(()=>{
     for (const row of cells) {
         for (const cell of row) {
-            if (!cell.hint === HINTS.correct) return false
+            if (cell.hint !== HINTS.correct) return false
         }
     }
     return true

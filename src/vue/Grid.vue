@@ -2,6 +2,7 @@
 import { ref, toRef, computed, reactive } from 'vue'
 import Cell from './Cell.vue'
 
+import { emitPromise } from '@/js/emit-promise'
 import {
     DEFAULT_GRID_SIZE,
     CHARACTER_KEYS,

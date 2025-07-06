@@ -219,8 +219,7 @@ function toggleDirection() {
             break
     }
 
-    const current_word_index = guessController.selected_word_index
-    guessController.selected_word_index = (current_word_index + size) % (2 * current_word_index)
+    emit('change-word', word_index.value)
 
 }
 
@@ -256,7 +255,7 @@ function selectCell( i, j ) {
     
     } else {
 
-        guessController.selected_word_index = word_index.value
+        emit('change-word', word_index.value)
 
     }
     

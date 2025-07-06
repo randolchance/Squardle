@@ -313,18 +313,6 @@ function deselectCell() {
 
 }
 
-function selectCurrentFirstCell() {
-    const { i, j } = getCurrentFirstCell()
-
-    selectCell( i, j )
-}
-
-function selectCurrentLastCell() {
-    const { i, j } = getCurrentLastCell()
-
-    selectCell( i, j )
-}
-
 function writeCell( key ) {
     const cell = currentCell.cell
     if (!cell) return

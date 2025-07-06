@@ -546,7 +546,7 @@ async function submit() {
 
         invalidWord()
 
-        selectCurrentFirstCell()
+        selectCurrentFirstFreeCell()
 
         is_submitting.value = false
 
@@ -572,7 +572,7 @@ async function submit() {
     
     } else {
 
-        selectCurrentFirstCell()
+        selectCurrentFirstFreeCell()
 
     }
 

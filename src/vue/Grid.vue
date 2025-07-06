@@ -21,6 +21,7 @@ const props = defineProps({
     disabled: Boolean,
 })
 
+const emit = defineEmits(['guess', 'change-word'])
 const size = DEFAULT_GRID_SIZE
 
 function makeCell( i, j ) {

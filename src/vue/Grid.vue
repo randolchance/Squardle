@@ -330,8 +330,10 @@ function writeCell( key ) {
     if (!cell) return
 
     cell.content = key
+    cell.hint = HINTS.unused
 
-    if (cell === getCurrentLastCell() && current_word.value) {
+    // This won't submit words that are finished with the last letter correct
+    if (cell === getCurrentLastFreeCell() && current_word.value) {
 
         submit()
     

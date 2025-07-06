@@ -10,7 +10,7 @@ const props = defineProps({
 })
 
 const letters = computed(()=>{
-    return props.word.map( ( content, i ) => {
+    return [...props.word].map( ( content, i ) => {
         const hint = props.hints[i];
         return { content, hint }
     } )

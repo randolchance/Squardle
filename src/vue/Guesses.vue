@@ -38,8 +38,6 @@ defineExpose({
 
 <template>
     <div class="guess-list">
-        <div v-for="guesses in selectedGuessList">
-            <Guess v-for="guess_data in guesses" :word="guess_data.word" :hints="guess_data.hints"/>
-        </div>
+        <Guess v-for="guess_data in selectedGuessList" :word="guess_data.word" :hints="guess_data.hints"/>
     </div>
 </template>

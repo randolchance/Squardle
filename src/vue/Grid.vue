@@ -1,8 +1,9 @@
 <script setup>
-import { ref, toRef, computed, reactive } from 'vue'
+import { ref, computed, reactive } from 'vue'
 import Cell from './Cell.vue'
 
 import { emitPromise } from '@/js/emit-promise'
+
 import {
     DEFAULT_GRID_SIZE,
     CHARACTER_KEYS,
@@ -16,7 +17,6 @@ import {
 const props = defineProps({
     puzzle_number: Number,
     mode: Number,
-    guessController: Object,
 
     disabled: Boolean,
 })

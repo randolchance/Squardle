@@ -157,14 +157,14 @@ function onKeydown( event ) {
                             previousWord()
                             break
                         case DIRECTIONS.vertical:
-                            previousCell()
+                            selectPreviousCell()
                             break
                     }
                     break
                 case 'ArrowRight':
                     switch (direction.value) {
                         case DIRECTIONS.horizontal:
-                            nextCell()
+                            selectNextCell()
                             break
                         case DIRECTIONS.vertical:
                             nextWord()
@@ -177,14 +177,14 @@ function onKeydown( event ) {
                             nextWord()
                             break
                         case DIRECTIONS.vertical:
-                            nextCell()
+                            selectNextCell()
                             break
                     }
                     break
                 case 'ArrowLeft':
                     switch (direction.value) {
                         case DIRECTIONS.horizontal:
-                            previousCell()
+                            selectPreviousCell()
                             break
                         case DIRECTIONS.vertical:
                             previousWord()
@@ -196,7 +196,7 @@ function onKeydown( event ) {
                     break
                 case 'Backspace':
                     clearCell()
-                    previousCell()
+                    selectPreviousCell()
                     break
                 
             }
@@ -293,7 +293,7 @@ function writeCell( key ) {
     
     } else {
 
-        nextCell()
+        selectNextCell()
 
     }
 }
@@ -306,34 +306,42 @@ function clearCell() {
 
     if (cell !== getCurrentFirstCell()) {
 
-        previousCell()
+        selectPreviousCell()
 
     }
 }
 
 function nextCell() {
-    if (!currentCell.cell) return
+    if (!currentCell.cell) return null
 
     let j = getCurrentRowIndex()
     let i = getCurrentColumnIndex()
     switch (direction.value) {
         case DIRECTIONS.horizontal:
             for (i += 1; i < size; i++) {
-                if (!cells[j][i].disabled) break
+                const cell = cells[j][i]
+                if (cell.hint !== HINTS.correct && !cell.locked) break
             }
             break
 
         case DIRECTIONS.vertical:
             for (j += 1; j < size; j++) {
-                if (!cells[j][i].disabled) break
+                const cell = cells[j][i]
+                if (cell.hint !== HINTS.correct && !cell.locked) break
             }
             break
     }
+
+    return cells[j][i]
+}
+
+function selectNextCell() {
+    const cell = nextCell()
+    if (!cell) return
     
-    selectCell( i, j )
+    selectCell( cell.i, cell.j )
 
     if (!currentCell.cell) nextWord()
-
 }
 
 function previousCell() {
@@ -344,13 +352,15 @@ function previousCell() {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
             for (i -= 1; i >= 0; i--) {
-                if (!cells[j][i].disabled) break
+                const cell = cells[j][i]
+                if (cell.hint !== HINTS.correct && !cell.locked) break
             }
             break
 
         case DIRECTIONS.vertical:
             for (j -= 1; j >= 0; j--) {
-                if (!cells[j][i].disabled) break
+                const cell = cells[j][i]
+                if (cell.hint !== HINTS.correct && !cell.locked) break
             }
             break
     }
@@ -359,6 +369,15 @@ function previousCell() {
 
     if (!currentCell.cell) previousWord()
 
+}
+
+function selectPreviousCell() {
+    const cell = previousCell()
+    if (!cell) return
+    
+    selectCell( cell.i, cell.j )
+
+    if (!currentCell.cell) previousWord()
 }
 
 function nextWord() {

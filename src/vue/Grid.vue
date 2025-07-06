@@ -22,6 +22,13 @@ const props = defineProps({
 })
 
 const emit = defineEmits(['guess', 'change-word'])
+
+const is_submitting = ref(false)
+
+const disabled = computed(()=>{
+    return is_submitting.value
+})
+
 const size = DEFAULT_GRID_SIZE
 
 function makeCell( i, j ) {
@@ -529,6 +536,8 @@ async function submit() {
         // Do something with the error and pass it to error
 
         error()
+        
+        is_submitting.value = false
 
         return
     }
@@ -538,6 +547,8 @@ async function submit() {
         invalidWord()
 
         selectCurrentFirstCell()
+
+        is_submitting.value = false
 
         return
     }
@@ -570,6 +581,8 @@ async function submit() {
         // Win condition because there are no words left to select
 
     }
+
+    is_submitting.value = false
     
 }
 
@@ -627,7 +640,7 @@ const classes = computed(()=>{
 </script>
 
 <template>
-    <button class="grid" @keydown.prevent="onKeydown">
+    <button class="grid" :disabled="disabled" @keydown.prevent="onKeydown">
         <div class="grid-row" v-for="(row, j) in cells">
             <Cell v-for="(cell, i) in row" :class="classes[j][i]" :cell="cell" @click.prevent="()=>onClick(i,j)"/>
         </div>

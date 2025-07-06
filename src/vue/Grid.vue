@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, reactive } from 'vue'
+import { ref, computed, reactive, watchEffect } from 'vue'
 import Cell from './Cell.vue'
 
 import { emitPromise } from '@/js/emit-promise'
@@ -74,6 +74,10 @@ const word_index = computed(()=>{
 
     return direction.value === DIRECTIONS.horizontal ?
         getCurrentRowIndex() : size + getCurrentColumnIndex()
+})
+
+watchEffect(()=>{
+    emit('change-word', word_index.value)
 })
 
 const is_solved = computed(()=>{
@@ -263,8 +267,6 @@ function toggleDirection() {
             break
     }
 
-    emit('change-word', word_index.value)
-
 }
 
 function onClick( i, j ) {
@@ -297,10 +299,6 @@ function selectCell( i, j ) {
         
         toggleDirection()
     
-    } else {
-
-        emit('change-word', word_index.value)
-
     }
     
 }

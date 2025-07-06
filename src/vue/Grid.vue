@@ -35,6 +35,10 @@ function makeCell( i, j ) {
     }
 }
 
+function isCellDisabled( cell, direction ) {
+    return cell.hint === HINTS.correct || direction & cell.locked
+}
+
 const cells = reactive((()=>{
     const cells = []
     for (let j = 0; j < size; j++) {
@@ -50,6 +54,14 @@ const cells = reactive((()=>{
 const direction = ref(DIRECTIONS.horizontal)
 
 const currentCell = reactive({ cell: null })
+
+const currentRowIndex = computed(()=>{
+    return currentCell.cell ? currentCell.cell.j : null
+})
+
+const currentColumnIndex = computed(()=>{
+    return currentCell.cell ? currentCell.cell.i : null
+})
 
 const current_word = computed(()=>{
     let word = ''
@@ -73,7 +85,7 @@ const word_index = computed(()=>{
     if (!currentCell.cell) return null
 
     return direction.value === DIRECTIONS.horizontal ?
-        getCurrentRowIndex() : size + getCurrentColumnIndex()
+        currentRowIndex.value : size + currentColumnIndex.value
 })
 
 watchEffect(()=>{
@@ -89,29 +101,21 @@ const is_solved = computed(()=>{
     return true
 })
 
-function getCurrentRowIndex() {
-    return currentCell.cell ? currentCell.cell.j : null
-}
-
-function getCurrentColumnIndex() {
-    return currentCell.cell ? currentCell.cell.i : null
-}
-
 function* getCurrentRow() {
     if (!currentCell.cell) return
 
-    const currentRowIndex = getCurrentRowIndex()
+    const j = currentRowIndex.value
     for (let i = 0; i < size; i++) {
-        yield cells[currentRowIndex][i]
+        yield cells[j][i]
     }
 }
 
 function* getCurrentColumn() {
     if (!currentCell.cell) return
 
-    const currentColumnIndex = getCurrentColumnIndex()
+    const i = currentColumnIndex.value
     for (let j = 0; j < size; j++) {
-        yield cells[j][currentColumnIndex]
+        yield cells[j][i]
     }
 }
 
@@ -289,7 +293,7 @@ function selectCell( i, j ) {
     if (i < 0 || j < 0 || i >= size || j >= size) return
 
     const cell = cells[j][i]
-    if (cell.hint === HINTS.correct || cell.locked === DIRECTIONS.both) return
+    if (isCellDisabled( cell, direction.value )) return
 
     currentCell.cell = cell
 
@@ -343,67 +347,66 @@ function clearCell() {
     }
 }
 
-function nextCell() {
+function getCell( i, j ) {
+    return cells[j][i] || null
+}
+
+function getNextCell() {
     if (!currentCell.cell) return null
 
-    let j = getCurrentRowIndex()
-    let i = getCurrentColumnIndex()
+    let j = currentRowIndex.value
+    let i = currentColumnIndex.value
     switch (direction.value) {
         case DIRECTIONS.horizontal:
-            for (i += 1; i < size; i++) {
-                const cell = cells[j][i]
-                if (cell.hint !== HINTS.correct && !cell.locked) break
-            }
-            break
+            return getCell( ++i, j )
 
         case DIRECTIONS.vertical:
-            for (j += 1; j < size; j++) {
-                const cell = cells[j][i]
-                if (cell.hint !== HINTS.correct && !cell.locked) break
-            }
-            break
+            return getCell( i, ++j )
     }
-
-    return cells[j][i]
 }
 
 function selectNextCell() {
-    const cell = nextCell()
-    if (!cell) return
+    let cell = currentCell.cell
+    if (cell) {
+        do {
+
+            cell = getNextCell()
+
+        } while (cell && isCellDisabled( cell, direction.value ))
+    } else {
+        cell = getCell( 0, 0 )
+    }
     
     selectCell( cell.i, cell.j )
 
     if (!currentCell.cell) nextWord()
 }
 
-function previousCell() {
-    if (!currentCell.cell) return
+function getPreviousCell() {
+    if (!currentCell.cell) return null
 
-    let j = getCurrentRowIndex()
-    let i = getCurrentColumnIndex()
+    let j = currentRowIndex.value
+    let i = currentColumnIndex.value
     switch (direction.value) {
         case DIRECTIONS.horizontal:
-            for (i -= 1; i >= 0; i--) {
-                const cell = cells[j][i]
-                if (cell.hint !== HINTS.correct && !cell.locked) break
-            }
-            break
+            return getCell( --i, j )
 
         case DIRECTIONS.vertical:
-            for (j -= 1; j >= 0; j--) {
-                const cell = cells[j][i]
-                if (cell.hint !== HINTS.correct && !cell.locked) break
-            }
-            break
+            return getCell( i, --j )
     }
-
-    if (!currentCell.cell) previousWord()
-
 }
 
 function selectPreviousCell() {
-    const cell = previousCell()
-    if (!cell) return
+    let cell = currentCell.cell
+    if (cell) {
+        do {
+
+            cell = getPreviousCell()
+
+        } while (cell && isCellDisabled( cell, direction.value ))
+    } else {
+        cell = getCell( size-1, size-1 )
+    }
     
     selectCell( cell.i, cell.j )
 
@@ -416,23 +419,13 @@ function nextWord() {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
 
-            let j = getCurrentRowIndex() + 1
-            do {
-
-                selectCell( 0, j++ )
-
-            } while (!currentCell.cell && j < size)
+            selectCell( 0, currentRowIndex.value )
 
             break
 
         case DIRECTIONS.vertical:
 
-            let i = getCurrentColumnIndex() + 1
-            do {
-
-                selectCell( 0, i++ )
-
-            } while (!currentCell.cell && i < size)
+            selectCell( currentColumnIndex.value, 0 )
 
             break
     }
@@ -451,7 +444,7 @@ function previousWord() {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
 
-            let j = getCurrentRowIndex() - 1
+            let j = currentRowIndex.value
             do {
 
                 selectCell( 0, j-- )
@@ -462,7 +455,7 @@ function previousWord() {
 
         case DIRECTIONS.vertical:
 
-            let i = getCurrentColumnIndex() - 1
+            let i = getCurrentColumnIndex()
             do {
 
                 selectCell( i--, 0 )
@@ -509,7 +502,7 @@ async function submit() {
     let hints
     try {
 
-        const response = await fetch(`/guess?${params}`)
+        const response = await fetch(`http://127.0.0.1:8000/guess?${params}`)
 
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`)
@@ -597,16 +590,14 @@ const classes = computed(()=>{
     const is_horizontal = direction.value === DIRECTIONS.horizontal
     const currentFirstCell = getCurrentFirstCell()
     const currentLastCell = getCurrentLastCell()
-    const currentRowIndex = getCurrentRowIndex()
-    const currentColumnIndex = getCurrentColumnIndex()
     return cells.map((row)=>{
         return row.map((cell)=>{
             const { selected, i, j } = cell
-            const row_selected = is_horizontal && j === currentRowIndex
+            const row_selected = is_horizontal && j === currentRowIndex.value
             const row_selected_start = is_horizontal && cell === currentFirstCell
             const row_selected_end = is_horizontal && cell === currentLastCell
             const row_selected_middle = is_horizontal && row_selected && !row_selected_start && !row_selected_end
-            const column_selected = !is_horizontal && i === currentColumnIndex
+            const column_selected = !is_horizontal && i === currentColumnIndex.value
             const column_selected_start = !is_horizontal && cell === currentFirstCell
             const column_selected_end = !is_horizontal && cell === currentLastCell
             const column_selected_middle = !is_horizontal && column_selected && !column_selected_start && !column_selected_end

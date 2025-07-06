@@ -86,7 +86,12 @@ function* getCurrentWordCells() {
 
 const current_word = computed(()=>{
     let word = ''
-    for (const cell of getCurrentWordCells()) word += cell.content
+    for (const cell of getCurrentWordCells()) {
+        const content = cell.content
+        if (content == '_') return null
+
+        word += content
+    }
 
     return word
 })

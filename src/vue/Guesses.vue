@@ -1,5 +1,5 @@
 <script setup>
-import { reactive, computed, toRef } from 'vue';
+import { reactive, computed } from 'vue';
 import Guess from './Guess.vue';
 
 import { DEFAULT_GRID_SIZE } from '@/js/constants';

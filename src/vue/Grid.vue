@@ -166,7 +166,7 @@ function getCurrentLastFreeCell() {
     }
 }
 
-function selectCurrentFirstFreeCell() {
+function selectCurrentLastFreeCell() {
     const cell = getCurrentLastFreeCell()
     if (!cell) return
 

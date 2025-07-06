@@ -1,5 +1,5 @@
 <script setup>
-import { computed, reactive } from 'vue';
+import { reactive, computed, toRef } from 'vue';
 import Guess from './Guess.vue';
 
 import { DEFAULT_GRID_SIZE } from '@/js/constants';
@@ -11,7 +11,7 @@ const props = defineProps({
 
 const size = DEFAULT_GRID_SIZE
 
-const guessedWords = new Array(2*size).fill(null).map( _ => new Array() )
+const guessedWords = reactive(new Array(2*size).fill(null).map( _ => new Array() ))
 
 const selectedGuessList = computed(()=>{
     if (props.selected_word_index === null) return []

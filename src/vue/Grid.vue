@@ -23,12 +23,6 @@ const props = defineProps({
 
 const emit = defineEmits(['guess', 'change-word'])
 
-const is_submitting = ref(false)
-
-const disabled = computed(()=>{
-    return is_submitting.value
-})
-
 const size = DEFAULT_GRID_SIZE
 
 function makeCell( i, j ) {
@@ -54,8 +48,42 @@ const cells = reactive((()=>{
 })())
 
 const direction = ref(DIRECTIONS.horizontal)
+
 const currentCell = reactive({ cell: null })
 
+const current_word = computed(()=>{
+    let word = ''
+    for (const cell of getCurrentWordCells()) {
+        const content = cell.content
+        if (content == '_') return null
+
+        word += content
+    }
+
+    return word
+})
+
+const is_submitting = ref(false)
+
+const disabled = computed(()=>{
+    return is_submitting.value
+})
+
+const word_index = computed(()=>{
+    if (!currentCell.cell) return null
+
+    return direction.value === DIRECTIONS.horizontal ?
+        getCurrentRowIndex() : size + getCurrentColumnIndex()
+})
+
+const is_solved = computed(()=>{
+    for (const row of cells) {
+        for (const cell of row) {
+            if (cell.hint !== HINTS.correct) return false
+        }
+    }
+    return true
+})
 
 function getCurrentRowIndex() {
     return currentCell.cell ? currentCell.cell.j : null
@@ -90,34 +118,6 @@ function* getCurrentWordCells() {
 
     for (const cell of target) yield cell
 }
-
-const current_word = computed(()=>{
-    let word = ''
-    for (const cell of getCurrentWordCells()) {
-        const content = cell.content
-        if (content == '_') return null
-
-        word += content
-    }
-
-    return word
-})
-
-const word_index = computed(()=>{
-    if (!currentCell.cell) return null
-
-    return direction.value === DIRECTIONS.horizontal ?
-        getCurrentRowIndex() : size + getCurrentColumnIndex()
-})
-
-const is_solved = computed(()=>{
-    for (const row of cells) {
-        for (const cell of row) {
-            if (cell.hint !== HINTS.correct) return false
-        }
-    }
-    return true
-})
 
 function getCurrentFirstCell() {
     if (!currentCell.cell) return null

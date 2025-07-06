@@ -401,8 +401,6 @@ function previousCell() {
             }
             break
     }
-    
-    selectCell( i, j )
 
     if (!currentCell.cell) previousWord()
 

@@ -20,7 +20,9 @@ const letters = computed(()=>{
 
 
 <template>
-    <div class="guess-row" v-for="letter in letters">
-        <Letter :content="letter.content" :hint="letter.hint"/>
-    </div> 
+    <div class="guesses-container">
+        <div class="guess-row" v-for="letter in letters">
+            <Letter :content="letter.content" :hint="letter.hint"/>
+        </div>
+    </div>
 </template>

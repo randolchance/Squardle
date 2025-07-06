@@ -446,10 +446,15 @@ async function submit() {
         return
     }
 
+    is_submitting.value = true
+
+    const guessed_word = current_word.value
+    const selected_word_index = word_index.value
+
     const params = new URLSearchParams({
         p: props.puzzle_number,
-        i: word_index.value,
-        word: current_word.value,
+        i: selected_word_index,
+        word: guessed_word,
         m: props.mode,
     })
 
@@ -486,16 +491,18 @@ async function submit() {
 
     parseHints( hints )
 
-    const correct_guess = hints.every( hint => hint === HINTS.correct )
+    const is_correct = hints.every( hint => hint === HINTS.correct )
 
-    const remaining_guesses = guessController.guess( current_word.value, hints )
+    const guess_data = { word: current_word.value, hints }
+    const { remaining_guesses } = await emitPromise( emit, 'guess', guess_data )
+
     if (remaining_guesses == 0) {
 
         lockWord()
 
         nextWord()
     
-    } else if (correct_guess) {
+    } else if (is_correct) {
         
         nextWord()
     

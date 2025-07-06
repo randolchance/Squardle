@@ -16,8 +16,6 @@ const guessedWords = reactive(new Array(2*size).fill(null).map( _ => new Array()
 const selectedGuessList = computed(()=>{
     if (props.selected_word_index === null) return []
 
-    console.log(guessedWords[props.selected_word_index])
-
     return guessedWords[props.selected_word_index]
 })
 
@@ -27,12 +25,8 @@ function guess({ word, hints, callback }) {
         throw new Error(`No more guesses allowed!`)
     }
 
-    const current_guess_count = currentGuessedWords.push({ word, hints })
-
-    console.log(current_guess_count)
-
     callback({
-        remaining_guesses: props.max_guesses - current_guess_count
+        remaining_guesses: props.max_guesses - currentGuessedWords.push({ word, hints })
     })
 }
 

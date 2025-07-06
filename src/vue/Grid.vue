@@ -92,7 +92,7 @@ const current_word = computed(()=>{
 })
 
 const word_index = computed(()=>{
-    if (!currentCell.cell) return
+    if (!currentCell.cell) return null
 
     return direction.value === DIRECTIONS.horizontal ?
         getCurrentRowIndex() : size + getCurrentColumnIndex()

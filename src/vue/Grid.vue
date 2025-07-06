@@ -124,6 +124,21 @@ function getCurrentFirstCell() {
     }
 }
 
+function getCurrentFirstFreeCell() {
+    for (const cell of getCurrentWordCells()) {
+        if (cell !== HINTS.correct && !(cell.locked & direction.value)) {
+            return cell
+        }
+    }
+}
+
+function selectCurrentFirstFreeCell() {
+    const cell = getCurrentFirstFreeCell()
+    if (!cell) return
+
+    selectCell( cell.i, cell.j )
+}
+
 function getCurrentLastCell() {
     if (!currentCell.cell) return null
     
@@ -134,6 +149,21 @@ function getCurrentLastCell() {
         case DIRECTIONS.vertical:
             return cells[size-1][i]
     }
+}
+
+function getCurrentLastFreeCell() {
+    for (const cell of [...getCurrentWordCells()].reverse()) {
+        if (cell.hint !== HINTS.correct && !(cell.locked & direction.value)) {
+            return cell
+        }
+    }
+}
+
+function selectCurrentFirstFreeCell() {
+    const cell = getCurrentLastFreeCell()
+    if (!cell) return
+
+    selectCell( cell.i, cell.j )
 }
 
 function onKeydown( event ) {

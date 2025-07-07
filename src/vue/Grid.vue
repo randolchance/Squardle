@@ -346,7 +346,7 @@ function getPreviousFreeCell() {
 function selectPreviousCell() {
     const i = current_column_index.value
     const j = current_row_index.value
-    const cell = getNextFreeCell()
+    const cell = getPreviousFreeCell()
     switch (true) {
         case direction.value === DIRECTIONS.vertical && i < cell.i:
         case direction.value === DIRECTIONS.horizontal && j < cell.j:

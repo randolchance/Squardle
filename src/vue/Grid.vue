@@ -167,7 +167,7 @@ function onKeydown( event ) {
                     submit()
                     break
                 case 'Backspace':
-                    eraseCell()
+                    eraseCurrentCell()
                     break
                 
             }
@@ -252,15 +252,14 @@ function writeCell( key ) {
     }
 }
 
-function clearCell() {
-    const cell = currentCell.cell
+function clearCell( cell ) {
     if (!cell) return
 
     cell.content = '_'
 }
 
-function eraseCell() {
-    clearCell()
+function eraseCurrentCell() {
+    clearCell( currentCell.cell )
 
     const step_i = direction.value === DIRECTIONS.horizontal
     const step_j = direction.value === DIRECTIONS.vertical

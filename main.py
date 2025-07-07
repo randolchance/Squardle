@@ -1,4 +1,5 @@
 from fastapi import FastAPI, Request, status
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates as Templates
@@ -6,9 +7,24 @@ from fastapi.templating import Jinja2Templates as Templates
 from word_master import WordMaster
 
 
-templates = Templates(directory="dist")
 
 app = FastAPI()
+
+origins = [
+    "http://localhost:5173",
+    "https://localhost:5173",
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+
+
+templates = Templates(directory="dist")
 
 app.mount("/assets", StaticFiles(directory="dist/assets"), name="static")
 

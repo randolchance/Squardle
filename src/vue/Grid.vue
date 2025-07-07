@@ -400,7 +400,7 @@ function getCurrentFirstCell() {
 
 function getCurrentFirstFreeCell() {
     for (const cell of getCurrentWordCells()) {
-        if (cell !== HINTS.correct && !(cell.locked & direction.value)) {
+        if (!isCellDisabled( cell, direction.value )) {
             return cell
         }
     }

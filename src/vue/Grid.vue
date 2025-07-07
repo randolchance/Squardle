@@ -609,13 +609,17 @@ const classes = computed(()=>{
 <style>
 
 .grid {
+    width: 100%;
     display: flex;
     flex-direction: column;
+    justify-content: center;
 }
 
 .grid-row {
+    width: 100%;
     display: flex;
     flex-direction: row;
+    justify-content: center;
 }
 
 </style>

@@ -14,11 +14,13 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "host-dev": "fastapi dev main.py",
+    "host:both": "npm-run-all --parallel vite:dev host-dev",
     "dev": "npm-run-all --parallel dev:*",
     "dev:onchange": "onchange -k \"*.html\" \"src/**/*.js\" \"src/**/*.vue\" -- npm run dev:build",
     "dev:build": "vite build && npm run host-dev",
-    "build": "vite build",
-    "preview": "vite preview",
+    "vite:dev": "vite dev",
+    "vite:build": "vite build",
+    "vite:preview": "vite preview",
     "lint": "eslint . --fix"
   },
   "dependencies": {

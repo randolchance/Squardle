@@ -101,86 +101,6 @@ const is_solved = computed(()=>{
     return true
 })
 
-function* getCurrentRow() {
-    if (!currentCell.cell) return
-
-    const j = currentRowIndex.value
-    for (let i = 0; i < size; i++) {
-        yield cells[j][i]
-    }
-}
-
-function* getCurrentColumn() {
-    if (!currentCell.cell) return
-
-    const i = currentColumnIndex.value
-    for (let j = 0; j < size; j++) {
-        yield cells[j][i]
-    }
-}
-
-function* getCurrentWordCells() {
-    const target = direction.value === DIRECTIONS.horizontal
-        ? getCurrentRow()
-        : getCurrentColumn()
-
-    for (const cell of target) yield cell
-}
-
-function getCurrentFirstCell() {
-    if (!currentCell.cell) return null
-    
-    const { i, j } = currentCell.cell
-    switch (direction.value) {
-        case DIRECTIONS.horizontal:
-            return cells[j][0]
-        case DIRECTIONS.vertical:
-            return cells[0][i]
-    }
-}
-
-function getCurrentFirstFreeCell() {
-    for (const cell of getCurrentWordCells()) {
-        if (cell !== HINTS.correct && !(cell.locked & direction.value)) {
-            return cell
-        }
-    }
-}
-
-function selectCurrentFirstFreeCell() {
-    const cell = getCurrentFirstFreeCell()
-    if (!cell) return
-
-    selectCell( cell.i, cell.j )
-}
-
-function getCurrentLastCell() {
-    if (!currentCell.cell) return null
-    
-    const { i, j } = currentCell.cell
-    switch (direction.value) {
-        case DIRECTIONS.horizontal:
-            return cells[j][size-1]
-        case DIRECTIONS.vertical:
-            return cells[size-1][i]
-    }
-}
-
-function getCurrentLastFreeCell() {
-    for (const cell of [...getCurrentWordCells()].reverse()) {
-        if (cell.hint !== HINTS.correct && !(cell.locked & direction.value)) {
-            return cell
-        }
-    }
-}
-
-function selectCurrentLastFreeCell() {
-    const cell = getCurrentLastFreeCell()
-    if (!cell) return
-
-    selectCell( cell.i, cell.j )
-}
-
 function onKeydown( event ) {
     const { key } = event
     console.log(key)
@@ -206,7 +126,7 @@ function onKeydown( event ) {
                 case 'ArrowUp':
                     switch (direction.value) {
                         case DIRECTIONS.horizontal:
-                            previousWord()
+                            selectPreviousWord()
                             break
                         case DIRECTIONS.vertical:
                             selectPreviousCell()
@@ -219,14 +139,14 @@ function onKeydown( event ) {
                             selectNextCell()
                             break
                         case DIRECTIONS.vertical:
-                            nextWord()
+                            selectNextWord()
                             break
                     }
                     break
                 case 'ArrowDown':
                     switch (direction.value) {
                         case DIRECTIONS.horizontal:
-                            nextWord()
+                            selectNextWord()
                             break
                         case DIRECTIONS.vertical:
                             selectNextCell()
@@ -239,7 +159,7 @@ function onKeydown( event ) {
                             selectPreviousCell()
                             break
                         case DIRECTIONS.vertical:
-                            previousWord()
+                            selectPreviousWord()
                             break
                     }
                     break
@@ -247,8 +167,7 @@ function onKeydown( event ) {
                     submit()
                     break
                 case 'Backspace':
-                    clearCell()
-                    selectPreviousCell()
+                    eraseCell()
                     break
                 
             }
@@ -339,138 +258,199 @@ function clearCell() {
     if (!cell) return
 
     cell.content = '_'
+}
 
-    if (cell !== getCurrentFirstCell()) {
+function eraseCell() {
+    clearCell()
 
-        selectPreviousCell()
+    const step_i = direction.value === DIRECTIONS.horizontal
+    const step_j = direction.value === DIRECTIONS.vertical
 
-    }
+    let cell = currentCell.cell
+    let i = cell.i
+    let j = cell.j
+    do {
+        i -= step_i
+        j -= step_j
+        cell = getCell( i, j )
+    } while (cell && isCellDisabled(cell, direction.value))
+
+    if (cell !== currentCell.cell) selectCell( i, j )
 }
 
 function getCell( i, j ) {
     return cells[j][i] || null
 }
 
-function getNextCell() {
-    if (!currentCell.cell) return null
+function* iterateCells( i, j, direction, forwards=true ) {
+    if (is_solved.value) return
 
-    let j = currentRowIndex.value
-    let i = currentColumnIndex.value
-    switch (direction.value) {
-        case DIRECTIONS.horizontal:
-            return getCell( ++i, j )
-
-        case DIRECTIONS.vertical:
-            return getCell( i, ++j )
+    const step = forwards ? 1 : -1
+    const inLimit = index => {
+        return forwards ? index < size : index >= 0
     }
+
+    const is_horizontal = direction === DIRECTIONS.horizontal
+    let [inner, outer] = is_horizontal ? [i + step, j] : [j + step, i]
+
+    outer = step * !inLimit(inner)
+    inner %= size
+
+    for (; inLimit(outer); outer += step) {
+        for (; inLimit(inner); inner += step) {
+            const cell = is_horizontal ? getCell( inner, outer ) : getCell( outer, inner )
+            if (cell) yield cell
+        }
+    }
+
+    if (inner == size-1 && outer == size-1 || inner == 0 && outer == 0) {
+
+        direction = direction ^ DIRECTIONS.both
+
+        for (const cell of iterateCells( 0, 0, direction, forwards )) yield cell
+
+    }
+}
+
+function* iterateFreeCells( i, j, direction, forwards=true ) {
+    for (const cell of iterateCells( i, j, direction, forwards )) {
+        if (isCellDisabled(cell, direction.value)) continue
+
+        yield cell
+    }
+}
+
+function getNextFreeCell() {
+    if (!currentCell.cell) return getCell( 0, 0 )
+
+    const cell = currentCell.cell
+    return iterateFreeCells( cell.i, cell.j, direction.value ).next().value
 }
 
 function selectNextCell() {
-    let cell = currentCell.cell
-    if (cell) {
-        do {
-
-            cell = getNextCell()
-
-        } while (cell && isCellDisabled( cell, direction.value ))
-    } else {
-        cell = getCell( 0, 0 )
+    const i = currentColumnIndex.value
+    const j = currentRowIndex.value
+    const cell = getNextFreeCell()
+    switch (true) {
+        case direction.value === DIRECTIONS.vertical && i > cell.i:
+        case direction.value === DIRECTIONS.horizontal && j > cell.j:
+            toggleDirection()
     }
-    
-    selectCell( cell.i, cell.j )
 
-    if (!currentCell.cell) nextWord()
+    selectCell( cell.i, cell.j )
 }
 
-function getPreviousCell() {
-    if (!currentCell.cell) return null
+function getPreviousFreeCell() {
+    if (!currentCell.cell) return getCell( 0, 0 )
 
-    let j = currentRowIndex.value
-    let i = currentColumnIndex.value
-    switch (direction.value) {
-        case DIRECTIONS.horizontal:
-            return getCell( --i, j )
-
-        case DIRECTIONS.vertical:
-            return getCell( i, --j )
-    }
+    const cell = currentCell.cell
+    return iterateFreeCells( cell.i, cell.j, direction.value, false ).next()
 }
 
 function selectPreviousCell() {
-    let cell = currentCell.cell
-    if (cell) {
-        do {
-
-            cell = getPreviousCell()
-
-        } while (cell && isCellDisabled( cell, direction.value ))
-    } else {
-        cell = getCell( size-1, size-1 )
+    const i = currentColumnIndex.value
+    const j = currentRowIndex.value
+    const cell = getNextFreeCell()
+    switch (true) {
+        case direction.value === DIRECTIONS.vertical && i < cell.i:
+        case direction.value === DIRECTIONS.horizontal && j < cell.j:
+            toggleDirection()
     }
-    
+
     selectCell( cell.i, cell.j )
-
-    if (!currentCell.cell) previousWord()
 }
 
-function nextWord() {
-    if (!currentCell.cell || is_solved) return
+function* getCurrentRow() {
+    if (!currentCell.cell) return
 
-    switch (direction.value) {
-        case DIRECTIONS.horizontal:
-
-            selectCell( 0, currentRowIndex.value )
-
-            break
-
-        case DIRECTIONS.vertical:
-
-            selectCell( currentColumnIndex.value, 0 )
-
-            break
+    const j = currentRowIndex.value
+    for (let i = 0; i < size; i++) {
+        yield cells[j][i]
     }
-
-    if (!currentCell.cell) {
-
-        toggleDirection()
-
-    }
-
 }
 
-function previousWord() {
-    if (!currentCell.cell || is_solved) return
+function* getCurrentColumn() {
+    if (!currentCell.cell) return
+
+    const i = currentColumnIndex.value
+    for (let j = 0; j < size; j++) {
+        yield cells[j][i]
+    }
+}
+
+function* getCurrentWordCells() {
+    const target = direction.value === DIRECTIONS.horizontal
+        ? getCurrentRow()
+        : getCurrentColumn()
+
+    for (const cell of target) yield cell
+}
+
+function getCurrentFirstCell() {
+    if (!currentCell.cell) return null
     
+    const { i, j } = currentCell.cell
     switch (direction.value) {
         case DIRECTIONS.horizontal:
-
-            let j = currentRowIndex.value
-            do {
-
-                selectCell( 0, j-- )
-
-            } while (!currentCell.cell && j >= 0)
-
-            break
-
+            return cells[j][0]
         case DIRECTIONS.vertical:
-
-            let i = getCurrentColumnIndex()
-            do {
-
-                selectCell( i--, 0 )
-
-            } while (!currentCell.cell && i >= 0)
-
-            break
+            return cells[0][i]
     }
+}
 
-    if (!currentCell.cell) {
-
-        toggleDirection()
-
+function getCurrentFirstFreeCell() {
+    for (const cell of getCurrentWordCells()) {
+        if (cell !== HINTS.correct && !(cell.locked & direction.value)) {
+            return cell
+        }
     }
+}
 
+function selectCurrentFirstFreeCell() {
+    const cell = getCurrentFirstFreeCell()
+    if (!cell) return
+
+    selectCell( cell.i, cell.j )
+}
+
+function getCurrentLastCell() {
+    if (!currentCell.cell) return null
+    
+    const { i, j } = currentCell.cell
+    switch (direction.value) {
+        case DIRECTIONS.horizontal:
+            return cells[j][size-1]
+        case DIRECTIONS.vertical:
+            return cells[size-1][i]
+    }
+}
+
+function getCurrentLastFreeCell() {
+    for (const cell of [...getCurrentWordCells()].reverse()) {
+        if (cell.hint !== HINTS.correct && !(cell.locked & direction.value)) {
+            return cell
+        }
+    }
+}
+
+function selectCurrentLastFreeCell() {
+    const cell = getCurrentLastFreeCell()
+    if (!cell) return
+
+    selectCell( cell.i, cell.j )
+}
+
+function selectNextWord() {
+    const { i, j } = getCurrentLastCell()
+    const cell = iterateFreeCells( i, j, direction.value ).next().value
+    selectCell( cell.i, cell.j )
+}
+
+function selectPreviousWord() {
+    const i = direction.value === DIRECTIONS.vertical ? size-1 : currentColumnIndex.value
+    const j = direction.value === DIRECTIONS.horizontal ? size-1 : currentRowIndex.value
+    const cell = iterateFreeCells( i, j, direction.value ).next().value
+    selectCell( cell.i, cell.j )
 }
 
 function lockWord() {
@@ -545,11 +525,11 @@ async function submit() {
 
         lockWord()
 
-        nextWord()
+        selectNextWord()
     
     } else if (is_correct) {
         
-        nextWord()
+        selectNextWord()
     
     } else {
 

@@ -26,6 +26,9 @@ function changeWord( word_index ) {
         <div class="grid-container">
             <Grid :puzzle_number="1" :mode="0" @guess="makeGuess" @change-word="changeWord"/>
         </div>
+        <div class="puzzle-list-container">
+            
+        </div>
     </div>
 </template>
 

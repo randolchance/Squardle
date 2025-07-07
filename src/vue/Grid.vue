@@ -294,7 +294,7 @@ function* iterateCells( i, j, direction, forwards=true ) {
     let [inner, outer] = is_horizontal ? [i + step, j] : [j + step, i]
 
     outer = step * !inLimit(inner)
-    inner %= size
+    inner = (inner + size) % size
 
     for (; inLimit(outer); outer += step) {
         for (; inLimit(inner); inner += step) {

@@ -35,7 +35,7 @@ function changeWord( word_index ) {
 <style>
 
 :root {
-    --pixel-size: 14px;
+    --pixel-size: round(down, 0.73vw, 1px);
 
     --pixel-size-x: var(--pixel-size);
     --pixel-size-y: var(--pixel-size);

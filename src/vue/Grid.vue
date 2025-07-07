@@ -356,11 +356,20 @@ function selectPreviousCell() {
     selectCell( cell )
 }
 
+function* getRow({ j }) {
+    for (let i = 0; i < size; i++) {
+        yield cells[j][i]
+    }
+}
+
 function* getCurrentRow() {
     if (!currentCell.cell) return
 
-    const j = current_row_index.value
-    for (let i = 0; i < size; i++) {
+    for (const cell of getRow( currentCell.cell )) yield cell
+}
+
+function* getColumn({ i }) {
+    for (let j = 0; j < size; j++) {
         yield cells[j][i]
     }
 }
@@ -368,10 +377,7 @@ function* getCurrentRow() {
 function* getCurrentColumn() {
     if (!currentCell.cell) return
 
-    const i = current_column_index.value
-    for (let j = 0; j < size; j++) {
-        yield cells[j][i]
-    }
+    for (const cell of getColumn( currentCell.cell )) yield cell
 }
 
 function* getCurrentWordCells() {

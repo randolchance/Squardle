@@ -382,7 +382,7 @@ function* getCurrentWordCells() {
     for (const cell of target) yield cell
 }
 
-function getFirstCell({ i, j }) {
+function getFirstCellInWord({ i, j }) {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
             return cells[j][0]
@@ -394,7 +394,7 @@ function getFirstCell({ i, j }) {
 function getCurrentFirstCell() {
     if (!currentCell.cell) return null
     
-    return getFirstCell( currentCell.cell )
+    return getFirstCellInWord( currentCell.cell )
 }
 
 function getCurrentFirstFreeCell() {
@@ -412,7 +412,7 @@ function selectCurrentFirstFreeCell() {
     selectCell( cell )
 }
 
-function getLastCell({ i, j }) {
+function getLastCellInWord({ i, j }) {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
             return cells[j][size-1]
@@ -424,7 +424,7 @@ function getLastCell({ i, j }) {
 function getCurrentLastCell() {
     if (!currentCell.cell) return null
     
-    return getLastCell( currentCell.cell )
+    return getLastCellInWord( currentCell.cell )
 }
 
 function getCurrentLastFreeCell() {
@@ -449,7 +449,7 @@ function selectNextWord() {
 
 function selectPreviousWord() {
     const previous_cell = iterateFreeCells( getCurrentFirstCell(), direction.value, false ).next().value
-    const cell = getFirstCell( previous_cell )
+    const cell = getFirstCellInWord( previous_cell )
     selectCell( cell )
 }
 

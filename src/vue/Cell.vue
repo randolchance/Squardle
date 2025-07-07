@@ -17,7 +17,7 @@ const { cell } = defineProps({
 
 <template>
     <div class="cell" :disabled="disabled">
-        <Letter :content="cell.content" :hint="cell.hint"/>
+        <Letter class="cell-letter" :content="cell.content" :hint="cell.hint"/>
     </div>
 </template>
 

@@ -293,7 +293,7 @@ function* iterateCells( i, j, direction, forwards=true ) {
     const is_horizontal = direction === DIRECTIONS.horizontal
     let [inner, outer] = is_horizontal ? [i + step, j] : [j + step, i]
 
-    outer = step * !inLimit(inner)
+    outer += step * !inLimit(inner)
     inner = (inner + size) % size
 
     for (; inLimit(outer); outer += step) {

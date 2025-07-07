@@ -340,7 +340,7 @@ function getPreviousFreeCell() {
     if (!currentCell.cell) return getCell( 0, 0 )
 
     const cell = currentCell.cell
-    return iterateFreeCells( cell, direction.value, false ).next()
+    return iterateFreeCells( cell, direction.value, false ).next().value
 }
 
 function selectPreviousCell() {

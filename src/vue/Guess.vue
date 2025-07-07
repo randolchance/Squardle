@@ -21,8 +21,6 @@ const letters = computed(()=>{
 
 <template>
     <div class="guesses-container">
-        <div class="guess-row" v-for="letter in letters">
-            <Letter :content="letter.content" :hint="letter.hint"/>
-        </div>
+        <Letter class="guess-letter" v-for="letter in letters" :content="letter.content" :hint="letter.hint"/>
     </div>
 </template>

@@ -200,18 +200,17 @@ function onClick( i, j ) {
 
     } else {
 
-        selectCell( i, j )
+        selectCell( cell )
 
     }
 }
 
-function selectCell( i, j ) {
-    
+function selectCell( cell ) {
     if (currentCell.cell) deselectCell()
 
+    const { i, j } = cell
     if (i < 0 || j < 0 || i >= size || j >= size) return
 
-    const cell = cells[j][i]
     if (isCellDisabled( cell, direction.value )) return
 
     currentCell.cell = cell
@@ -275,14 +274,14 @@ function eraseCell() {
         cell = getCell( i, j )
     } while (cell && isCellDisabled(cell, direction.value))
 
-    if (cell !== currentCell.cell) selectCell( i, j )
+    if (cell !== currentCell.cell) selectCell({ i, j })
 }
 
 function getCell( i, j ) {
     return cells[j][i] || null
 }
 
-function* iterateCells( i, j, direction, forwards=true ) {
+function* iterateCells( { i, j }, direction, forwards=true ) {
     if (is_solved.value) return
 
     const step = forwards ? 1 : -1
@@ -307,13 +306,13 @@ function* iterateCells( i, j, direction, forwards=true ) {
 
         direction = direction ^ DIRECTIONS.both
 
-        for (const cell of iterateCells( 0, 0, direction, forwards )) yield cell
+        for (const cell of iterateCells( {i:0, j:0}, direction, forwards )) yield cell
 
     }
 }
 
-function* iterateFreeCells( i, j, direction, forwards=true ) {
-    for (const cell of iterateCells( i, j, direction, forwards )) {
+function* iterateFreeCells( coords, direction, forwards=true ) {
+    for (const cell of iterateCells( coords, direction, forwards )) {
         if (isCellDisabled(cell, direction.value)) continue
 
         yield cell
@@ -323,8 +322,7 @@ function* iterateFreeCells( i, j, direction, forwards=true ) {
 function getNextFreeCell() {
     if (!currentCell.cell) return getCell( 0, 0 )
 
-    const cell = currentCell.cell
-    return iterateFreeCells( cell.i, cell.j, direction.value ).next().value
+    return iterateFreeCells( currentCell.cell, direction.value ).next().value
 }
 
 function selectNextCell() {
@@ -337,14 +335,14 @@ function selectNextCell() {
             toggleDirection()
     }
 
-    selectCell( cell.i, cell.j )
+    selectCell( cell )
 }
 
 function getPreviousFreeCell() {
     if (!currentCell.cell) return getCell( 0, 0 )
 
     const cell = currentCell.cell
-    return iterateFreeCells( cell.i, cell.j, direction.value, false ).next()
+    return iterateFreeCells( cell, direction.value, false ).next()
 }
 
 function selectPreviousCell() {
@@ -357,7 +355,7 @@ function selectPreviousCell() {
             toggleDirection()
     }
 
-    selectCell( cell.i, cell.j )
+    selectCell( cell )
 }
 
 function* getCurrentRow() {
@@ -386,16 +384,19 @@ function* getCurrentWordCells() {
     for (const cell of target) yield cell
 }
 
-function getCurrentFirstCell() {
-    if (!currentCell.cell) return null
-    
-    const { i, j } = currentCell.cell
+function getFirstCell({ i, j }) {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
             return cells[j][0]
         case DIRECTIONS.vertical:
             return cells[0][i]
     }
+}
+
+function getCurrentFirstCell() {
+    if (!currentCell.cell) return null
+    
+    return getFirstCell( currentCell.cell )
 }
 
 function getCurrentFirstFreeCell() {
@@ -410,19 +411,22 @@ function selectCurrentFirstFreeCell() {
     const cell = getCurrentFirstFreeCell()
     if (!cell) return
 
-    selectCell( cell.i, cell.j )
+    selectCell( cell )
 }
 
-function getCurrentLastCell() {
-    if (!currentCell.cell) return null
-    
-    const { i, j } = currentCell.cell
+function getLastCell({ i, j }) {
     switch (direction.value) {
         case DIRECTIONS.horizontal:
             return cells[j][size-1]
         case DIRECTIONS.vertical:
             return cells[size-1][i]
     }
+}
+
+function getCurrentLastCell() {
+    if (!currentCell.cell) return null
+    
+    return getLastCell( currentCell.cell )
 }
 
 function getCurrentLastFreeCell() {
@@ -441,15 +445,14 @@ function selectCurrentLastFreeCell() {
 }
 
 function selectNextWord() {
-    const { i, j } = getCurrentLastCell()
-    const cell = iterateFreeCells( i, j, direction.value ).next().value
-    selectCell( cell.i, cell.j )
+    const cell = iterateFreeCells( getCurrentLastCell(), direction.value ).next().value
+    selectCell( cell )
 }
 
 function selectPreviousWord() {
-    const { i, j } = getCurrentFirstCell()
-    const cell = iterateFreeCells( i, j, direction.value, false ).next().value
-    selectCell( cell.i, cell.j )
+    const previous_cell = iterateFreeCells( getCurrentFirstCell(), direction.value, false ).next().value
+    const cell = getFirstCell( previous_cell )
+    selectCell( cell )
 }
 
 function lockWord() {

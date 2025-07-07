@@ -240,7 +240,6 @@ function writeCell( key ) {
     cell.content = key
     cell.hint = HINTS.unused
 
-    // This won't submit words that are finished with the last letter correct
     if (cell === getCurrentLastFreeCell() && current_word.value) {
 
         submit()

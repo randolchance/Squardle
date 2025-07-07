@@ -64,17 +64,22 @@ button, button:focus {
     flex-direction: row;
 }
 
-.guess-lists-container.closed {
-    height: 100%;
-}
-
 .guess-lists-container {
+    display: flex;
     width: 25vw;
     height: 100vh;
 }
 
 .grid-container {
-    width: 100%;
+    display: flex;
+    width: 50vw;
+    height: 100%;
+    margin: auto;
+}
+
+.puzzle-list-container {
+    display: flex;
+    width: 25vw;
     height: 100%;
 }
 

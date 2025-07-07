@@ -447,9 +447,8 @@ function selectNextWord() {
 }
 
 function selectPreviousWord() {
-    const i = direction.value === DIRECTIONS.vertical ? size-1 : currentColumnIndex.value
-    const j = direction.value === DIRECTIONS.horizontal ? size-1 : currentRowIndex.value
-    const cell = iterateFreeCells( i, j, direction.value ).next().value
+    const { i, j } = getCurrentFirstCell()
+    const cell = iterateFreeCells( i, j, direction.value, false ).next().value
     selectCell( cell.i, cell.j )
 }
 

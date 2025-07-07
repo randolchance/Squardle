@@ -37,7 +37,41 @@ defineExpose({
 </script>
 
 <template>
-    <div class="guess-list">
-        <Guess v-for="guess_data in selectedGuessList" :word="guess_data.word" :hints="guess_data.hints"/>
-    </div>
+    <Transition name="left-slide">
+        <div class="guess-list" v-if="selectedGuessList.length > 0" >
+            <Guess class="guess-row" v-for="guess_data in selectedGuessList" :word="guess_data.word" :hints="guess_data.hints"/>
+        </div>
+    </Transition>
 </template>
+
+
+<style>
+
+.guess-list {
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+}
+
+.guess-row {
+    width: 80%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+.left-slide-enter-active {
+  transition: all 0.2s ease-out;
+}
+
+.left-slide-leave-active {
+  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.left-slide-enter-from,
+.left-slide-leave-to {
+  transform: scale(0);
+}
+
+</style>

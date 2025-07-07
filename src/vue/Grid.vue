@@ -326,8 +326,8 @@ function getNextFreeCell() {
 }
 
 function selectNextCell() {
-    const i = currentColumnIndex.value
-    const j = currentRowIndex.value
+    const i = current_column_index.value
+    const j = current_row_index.value
     const cell = getNextFreeCell()
     switch (true) {
         case direction.value === DIRECTIONS.vertical && i > cell.i:
@@ -346,8 +346,8 @@ function getPreviousFreeCell() {
 }
 
 function selectPreviousCell() {
-    const i = currentColumnIndex.value
-    const j = currentRowIndex.value
+    const i = current_column_index.value
+    const j = current_row_index.value
     const cell = getNextFreeCell()
     switch (true) {
         case direction.value === DIRECTIONS.vertical && i < cell.i:
@@ -361,7 +361,7 @@ function selectPreviousCell() {
 function* getCurrentRow() {
     if (!currentCell.cell) return
 
-    const j = currentRowIndex.value
+    const j = current_row_index.value
     for (let i = 0; i < size; i++) {
         yield cells[j][i]
     }
@@ -370,7 +370,7 @@ function* getCurrentRow() {
 function* getCurrentColumn() {
     if (!currentCell.cell) return
 
-    const i = currentColumnIndex.value
+    const i = current_column_index.value
     for (let j = 0; j < size; j++) {
         yield cells[j][i]
     }
@@ -575,11 +575,11 @@ const classes = computed(()=>{
     return cells.map((row)=>{
         return row.map((cell)=>{
             const { selected, i, j } = cell
-            const row_selected = is_horizontal && j === currentRowIndex.value
+            const row_selected = is_horizontal && j === current_row_index.value
             const row_selected_start = is_horizontal && cell === currentFirstCell
             const row_selected_end = is_horizontal && cell === currentLastCell
             const row_selected_middle = is_horizontal && row_selected && !row_selected_start && !row_selected_end
-            const column_selected = !is_horizontal && i === currentColumnIndex.value
+            const column_selected = !is_horizontal && i === current_column_index.value
             const column_selected_start = !is_horizontal && cell === currentFirstCell
             const column_selected_end = !is_horizontal && cell === currentLastCell
             const column_selected_middle = !is_horizontal && column_selected && !column_selected_start && !column_selected_end

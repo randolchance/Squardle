@@ -55,11 +55,11 @@ const direction = ref(DIRECTIONS.horizontal)
 
 const currentCell = reactive({ cell: null })
 
-const currentRowIndex = computed(()=>{
+const current_row_index = computed(()=>{
     return currentCell.cell ? currentCell.cell.j : null
 })
 
-const currentColumnIndex = computed(()=>{
+const current_column_index = computed(()=>{
     return currentCell.cell ? currentCell.cell.i : null
 })
 
@@ -85,7 +85,7 @@ const word_index = computed(()=>{
     if (!currentCell.cell) return null
 
     return direction.value === DIRECTIONS.horizontal ?
-        currentRowIndex.value : size + currentColumnIndex.value
+        current_row_index.value : size + current_column_index.value
 })
 
 watchEffect(()=>{

@@ -19,6 +19,10 @@ const selectedGuessList = computed(()=>{
     return guessedWords[props.selected_word_index]
 })
 
+const showSelectedGuessList = computed(()=>{
+    return selectedGuessList.length > 0
+})
+
 function guess({ word, hints, callback }) {
     const currentGuessedWords = guessedWords[props.selected_word_index]
     if (props.max_guesses - currentGuessedWords.length <= 0) {

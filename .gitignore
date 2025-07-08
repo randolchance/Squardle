@@ -161,6 +161,3 @@ dist
 dist-ssr
 coverage
 *.local
-
-# Custom
-VueExample

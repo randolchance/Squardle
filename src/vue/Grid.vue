@@ -390,12 +390,13 @@ function* getWordCells({ i, j }) {
 
     for (const cell of word) yield cell
 }
+
 function* getCurrentWordCells() {
-    const target = direction.value === DIRECTIONS.horizontal
+    const word = direction.value === DIRECTIONS.horizontal
         ? getCurrentRow()
         : getCurrentColumn()
 
-    for (const cell of target) yield cell
+    for (const cell of word) yield cell
 }
 
 function getFirstCellInWord({ i, j }) {

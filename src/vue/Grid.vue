@@ -101,10 +101,11 @@ const is_solved = computed(()=>{
     return true
 })
 
-function onKeydown( event ) {
+async function onKeydown( event ) {
     const { key } = event
     console.log(key)
     if (!VALID_KEYS.includes(key)) return
+    else if (disabled.value) return
 
     if (!currentCell.cell) {
         console.warn(`Keydown event is active but no cell is selected!`)
@@ -113,7 +114,7 @@ function onKeydown( event ) {
 
     switch (true) {
         case CHARACTER_KEYS.includes(key):
-            writeCell( key )
+            await writeCell( key )
             break
         case NON_CHARACTER_KEYS.includes(key):
             switch (key) {
@@ -164,7 +165,7 @@ function onKeydown( event ) {
                     }
                     break
                 case 'Enter':
-                    submit()
+                    await submit()
                     break
                 case 'Backspace':
                     eraseCurrentCell()
@@ -233,7 +234,7 @@ function deselectCell() {
 
 }
 
-function writeCell( key ) {
+async function writeCell( key ) {
     const cell = currentCell.cell
     if (!cell) return
 
@@ -242,7 +243,7 @@ function writeCell( key ) {
 
     if (cell === getCurrentLastFreeCell() && current_word.value) {
 
-        submit()
+        await submit()
     
     } else {
 

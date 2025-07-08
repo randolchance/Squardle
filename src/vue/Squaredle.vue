@@ -20,15 +20,9 @@ function changeWord( word_index ) {
 
 <template>
     <div class="squardle">
-        <div class="guess-lists-container">
-            <Guesses ref="guesses" :max_guesses="4" :selected_word_index="selected_word_index"/>
-        </div>
-        <div class="grid-container">
-            <Grid :puzzle_number="1" :mode="0" @guess="makeGuess" @change-word="changeWord"/>
-        </div>
-        <div class="puzzle-list-container">
-            
-        </div>
+        <Guesses ref="guesses" :max_guesses="4" :selected_word_index="selected_word_index"/>
+        <Grid :puzzle_number="1" :mode="0" @guess="makeGuess" @change-word="changeWord"/>
+        <PuzzleList/>
     </div>
 </template>
 

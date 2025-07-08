@@ -80,8 +80,8 @@ defineExpose({
 }
 
 .guess-row {
-    padding: 1vh;
-    width: 80%;
+    padding-top: var(--pixel-size-x);
+    width: 100%;
     display: flex;
     flex-direction: row;
     justify-content: center;

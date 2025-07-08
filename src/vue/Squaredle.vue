@@ -3,6 +3,7 @@
 import { ref, useTemplateRef } from "vue"
 import Grid from "./Grid.vue"
 import Guesses from "./Guesses.vue"
+import PuzzleList from "./PuzzleList.vue"
 
 const guesses = useTemplateRef('guesses')
 

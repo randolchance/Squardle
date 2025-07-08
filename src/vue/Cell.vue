@@ -9,14 +9,11 @@ const { cell } = defineProps({
     }
 })
 
-
-
-
 </script>
 
 
 <template>
-    <div class="cell" :disabled="disabled">
+    <div class="cell">
         <Letter class="cell-letter" :content="cell.content" :hint="cell.hint"/>
     </div>
 </template>

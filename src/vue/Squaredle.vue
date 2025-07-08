@@ -42,10 +42,10 @@ function changeWord( word_index ) {
 
     --selected-color: white;
     --correct-color: forestgreen;
-    --in-word-color: gold;
-    --in-word-horizontal-color: gold;
+    --in-word-color: rgb(253, 224, 56);
+    --in-word-horizontal-color: rgb(253, 224, 56);
     --in-word-vertical-color: deepskyblue;
-    --in-word-both-color: darkviolet;
+    --in-word-both-color: rgb(231, 91, 231);
 
     --selected-border-style: solid;
 

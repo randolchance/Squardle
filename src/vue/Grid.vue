@@ -194,6 +194,8 @@ function toggleDirection() {
 }
 
 function onClick( i, j ) {
+    if (disabled.value) return
+
     const cell = cells[j][i]
     if (cell === currentCell.cell) {
 

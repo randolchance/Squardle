@@ -24,3 +24,12 @@ const letters = computed(()=>{
         <Letter class="guess-letter" v-for="letter in letters" :content="letter.content" :hint="letter.hint"/>
     </div>
 </template>
+
+
+<style scoped>
+
+.guess-letter {
+    --scale: 0.45;
+}
+
+</style>

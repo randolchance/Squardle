@@ -30,48 +30,57 @@ const status = computed(() => {
 </script>
 
 <template>
-    <div class="content" :class="status">
+    <div class="cell-content" :class="status">
         <div class="pixel-row" v-for="(row, j) in LETTERS[props.content]" :data-j="j" >
             <div class="pixel" v-for="(pixel, i) in row" :data-i="i" :class="pixel != ' ' ? 'on' : 'off'" ></div>
         </div>
     </div>
 </template>
 
-<style>
+<style scoped>
 
-.content {
+.cell-letter {
+    --scale: 1;
+}
+
+.cell-content {
+
+    --cell-pixel-size: calc(var(--scale) * var(--pixel-size));
+    --cell-pixel-size-x: var(--cell-pixel-size);
+    --cell-pixel-size-y: var(--cell-pixel-size);
+
     display: flex;
     flex-direction: column;
 
-    width: calc( 7 * var(--pixel-size-x) );
-    height: calc( 7 * var(--pixel-size-y) );
+    width: calc( 7 * var(--cell-pixel-size-x) );
+    height: calc( 7 * var(--cell-pixel-size-y) );
 
     border-style: solid;
-    border-width: var(--pixel-size-y) var(--pixel-size-x) var(--pixel-size-y) var(--pixel-size-x);
+    border-width: var(--cell-pixel-size-y) var(--cell-pixel-size-x) var(--cell-pixel-size-y) var(--cell-pixel-size-x);
     border-color: #222222;
 }
 
-.content.correct {
+.cell-content.correct {
     border-color: var(--correct-color);
 }
 
-.content.in-word {
+.cell-content.in-word {
     border-color: var(--in-word-color);
 }
 
-.content.in-word-horizontal {
+.cell-content.in-word-horizontal {
     border-color: var(--in-word-horizontal-color);
 }
 
-.content.in-word-vertical {
+.cell-content.in-word-vertical {
     border-color: var(--in-word-vertical-color);
 }
 
-.content.in-word-both {
+.cell-content.in-word-both {
     border-color: var(--in-word-both-color);
 }
 
-.selected .content {
+.selected .cell-content {
     border-color: var(--selected-color);
     background-color: var(--selected-color);
 }
@@ -82,8 +91,8 @@ const status = computed(() => {
 }
 
 .pixel {
-    width: var(--pixel-size-x);
-    height: var(--pixel-size-y);
+    width: var(--cell-pixel-size-x);
+    height: var(--cell-pixel-size-y);
 }
 
 .pixel.off {
@@ -98,23 +107,23 @@ const status = computed(() => {
     background-color: black;
 }
 
-.content.correct .pixel.off {
+.cell-content.correct .pixel.off {
     background-color: var(--correct-color);
 }
 
-.content.in-word .pixel.off {
+.cell-content.in-word .pixel.off {
     background-color: var(--in-word-color);
 }
 
-.content.in-word-horizontal .pixel.off {
+.cell-content.in-word-horizontal .pixel.off {
     background-color: var(--in-word-horizontal-color);
 }
 
-.content.in-word-vertical .pixel.off {
+.cell-content.in-word-vertical .pixel.off {
     background-color: var(--in-word-vertical-color);
 }
 
-.content.in-word-both .pixel.off {
+.cell-content.in-word-both .pixel.off {
     background-color: var(--in-word-both-color);
 }
 
@@ -122,11 +131,11 @@ const status = computed(() => {
     background-color: var(--selected-color);
 }
 
-.content.correct .pixel.on,
-.content.in-word .pixel.on,
-.content.in-word-horizontal .pixel.on,
-.content.in-word-vertical .pixel.on,
-.content.in-word-both .pixel.on {
+.cell-content.correct .pixel.on,
+.cell-content.in-word .pixel.on,
+.cell-content.in-word-horizontal .pixel.on,
+.cell-content.in-word-vertical .pixel.on,
+.cell-content.in-word-both .pixel.on {
     background-color: black;
 }
 

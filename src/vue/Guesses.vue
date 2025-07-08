@@ -37,15 +37,34 @@ defineExpose({
 </script>
 
 <template>
-    <Transition name="left-slide">
-        <div class="guess-list" v-if="selectedGuessList.length > 0" :data-total-guesses="selectedGuessList.length">
-            <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :data-i="i" :word="guess_data.word" :hints="guess_data.hints"/>
-        </div>
-    </Transition>
+    <div class="guess-lists-container">
+        <h2 class="guess-list-header">Guesses</h2>
+        <h4 class="guesses-remaining" v-if="selected_word_index !== null">Remaining: {{ max_guesses - selectedGuessList.length }}</h4>
+        <Transition name="left-slide">
+            <div class="guess-list" v-if="showSelectedGuessList" :data-total-guesses="selectedGuessList.length">
+                <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :data-i="i" :word="guess_data.word" :hints="guess_data.hints"/>
+            </div>
+        </Transition>
+    </div>
 </template>
 
 
 <style scoped>
+
+.guess-lists-container {
+    display: flex;
+    flex-direction: column;
+    width: 25vw;
+    height: 100vh;
+}
+
+.guess-list-header {
+    text-align: center;
+}
+
+.guesses-remaining {
+    text-align: center;
+}
 
 .guess-list {
     width: 100%;

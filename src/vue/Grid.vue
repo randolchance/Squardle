@@ -606,14 +606,23 @@ const classes = computed(()=>{
 </script>
 
 <template>
-    <button class="grid" :disabled="disabled" @keydown.prevent="onKeydown">
-        <div class="grid-row" v-for="(row, j) in cells">
-            <Cell v-for="(cell, i) in row" :class="classes[j][i]" :cell="cell" @click.prevent="()=>onClick(i,j)"/>
-        </div>
-    </button>
+    <div class="grid-container">
+        <button ref="grid" tabindex="0" class="grid" @keydown.prevent="onKeydown">
+            <div class="grid-row" v-for="(row, j) in cells">
+                <Cell v-for="(cell, i) in row" :class="classes[j][i]" :cell="cell" @click.prevent="()=>onClick(i,j)"/>
+            </div>
+        </button>
+    </div>
 </template>
 
 <style>
+
+.grid-container {
+    display: flex;
+    width: 50vw;
+    height: 100%;
+    margin: auto;
+}
 
 .grid {
     width: 100%;

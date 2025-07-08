@@ -38,27 +38,32 @@ defineExpose({
 
 <template>
     <Transition name="left-slide">
-        <div class="guess-list" v-if="selectedGuessList.length > 0" >
-            <Guess class="guess-row" v-for="guess_data in selectedGuessList" :word="guess_data.word" :hints="guess_data.hints"/>
+        <div class="guess-list" v-if="selectedGuessList.length > 0" :data-total-guesses="selectedGuessList.length">
+            <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :data-i="i" :word="guess_data.word" :hints="guess_data.hints"/>
         </div>
     </Transition>
 </template>
 
 
-<style>
+<style scoped>
 
 .guess-list {
     width: 100%;
     display: flex;
     flex-direction: column;
     justify-content: center;
+
+    --guesses: attr(data-total-guesses type(<number>))
 }
 
 .guess-row {
+    padding: 1vh;
     width: 80%;
     display: flex;
     flex-direction: row;
     justify-content: center;
+
+    opacity: calc((attr(data-i type(<number>)) + 1) / (var(--guesses)));
 }
 
 .left-slide-enter-active {

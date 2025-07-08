@@ -31,6 +31,10 @@ const { cell } = defineProps({
     padding: var(--pixel-size-y) var(--pixel-size-x) var(--pixel-size-y) var(--pixel-size-x);
 }
 
+.cell-letter {
+    --scale: 1;
+}
+
 .cell.row-selected-start {
     border-style: var(--selected-border-style) none var(--selected-border-style) var(--selected-border-style);
     padding: 0 var(--pixel-size-x) 0 0;

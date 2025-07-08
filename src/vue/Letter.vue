@@ -39,10 +39,6 @@ const status = computed(() => {
 
 <style scoped>
 
-.cell-letter {
-    --scale: 1;
-}
-
 .cell-content {
 
     --cell-pixel-size: calc(var(--scale) * var(--pixel-size));

@@ -51,9 +51,20 @@ function changeWord( word_index ) {
 
 }
 
+@font-face {
+    font-family: "PublicPixel";
+    src: url("/src/fonts/PublicPixel.ttf")
+}
+
 body {
     margin: 0;
     background-color: #111111;
+    color: white;
+}
+
+h1, h2, h3, h4 {
+    font-family: "PublicPixel";
+    text-transform: uppercase;
 }
 
 button, button:focus {

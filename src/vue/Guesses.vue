@@ -20,7 +20,7 @@ const selectedGuessList = computed(()=>{
 })
 
 const showSelectedGuessList = computed(()=>{
-    return selectedGuessList.length > 0
+    return selectedGuessList.value.length > 0
 })
 
 function guess({ word, hints, callback }) {

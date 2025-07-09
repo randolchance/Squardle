@@ -383,14 +383,6 @@ function* getCurrentColumn() {
     for (const cell of getColumn( currentCell.cell )) yield cell
 }
 
-function* getWordCells({ i, j }) {
-    const word = direction.value === DIRECTIONS.horizontal
-        ? getRow({ j })
-        : getColumn({ i })
-
-    for (const cell of word) yield cell
-}
-
 function* getCurrentWordCells() {
     const word = direction.value === DIRECTIONS.horizontal
         ? getCurrentRow()

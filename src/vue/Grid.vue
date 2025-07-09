@@ -580,6 +580,7 @@ function parseHints( hints ) {
     for (const [cell, h] of [...getCurrentWordCells()].map( (cell, h) => [cell, h] )) {
 
         cell.hint = hints[h]
+        
     }
 }
 

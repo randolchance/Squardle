@@ -4,8 +4,8 @@ from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates as Templates
 
-from word_master import WordMaster
 
+from puzzle_master import PuzzleMaster
 
 
 app = FastAPI()
@@ -41,13 +41,13 @@ async def query_words(q: str):
 
 @app.get("/guess")
 async def guess_word(p: int, i: int, word: str, m: int):
-    wordMaster = WordMaster()
+    puzzleMaster = PuzzleMaster()
     if (not word.isascii()):
         return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST)
 
-    if (not wordMaster.isValidWord(word)):
+    if (not puzzleMaster.isValidWord(word)):
         return JSONResponse(status_code=status.HTTP_200_OK, content=None)
 
     easy_mode = not bool(m)
-    hints = wordMaster.guess(p, i, word, easy_mode)
+    hints = puzzleMaster.guess(p, i, word, easy_mode)
     return JSONResponse(status_code=status.HTTP_200_OK, content=hints)

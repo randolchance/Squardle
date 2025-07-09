@@ -36,7 +36,7 @@ def generate_letter_hint( letter, index, answer, is_horizontal ):
         return Hints.IN_WORD_HORIZONTAL if is_horizontal else Hints.IN_WORD_VERTICAL
 
 
-class WordMaster:
+class PuzzleMaster:
     def __init__(self, word_size=WORD_SIZE):
         with open("./word-trie.json") as file:
             self.words = Trie(json.loads(file.read()))
@@ -101,4 +101,3 @@ class WordMaster:
             hints[i] = hint
 
         return hints
-

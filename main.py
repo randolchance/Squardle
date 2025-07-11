@@ -12,7 +12,7 @@ from puzzle_master import PuzzleMaster
 config = Config("./config.env")
 
 SECRET_KEY = config('SECRET_KEY', cast=Secret)
-SESSION_EXPIRY = config('SESSION_EXPIRY', cast=int)
+SESSION_EXPIRY = config('SESSION_EXPIRY', cast=int) * 60 * 60   # Convert to seconds
 
 app = FastAPI()
 

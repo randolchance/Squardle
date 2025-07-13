@@ -105,6 +105,8 @@ async def guess_word(request: Request, guessData: GuessData):
     if (not puzzleMaster.isValidWord(word)):
         return JSONResponse(status_code=status.HTTP_200_OK, content=None)
 
-    hints = puzzleMaster.guess(p, i, word, easy_mode)
     easy_mode = mode == PuzzleMaster.Modes.ALL_HINTS
+
+    hints = puzzleMaster.guess(p, current_puzzle_state, word, word_index, easy_mode)
+
     return JSONResponse(status_code=status.HTTP_200_OK, content=hints)

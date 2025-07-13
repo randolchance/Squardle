@@ -161,3 +161,6 @@ dist
 dist-ssr
 coverage
 *.local
+
+# Custom
+config.env

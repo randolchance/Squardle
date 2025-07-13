@@ -149,8 +149,6 @@ class PuzzleMaster:
         guessed_perpendicular_words = \
             [ PuzzleMaster.getWordFromState(puzzle_state, i, not is_horizontal) for i in span ]
         
-        print(guessed_perpendicular_words)
-
         # Get the correct word for the index in the puzzle
         correct_word = "".join(puzzle[index]) if is_horizontal \
             else "".join([puzzle[j][index] for j in span])
@@ -207,7 +205,5 @@ class PuzzleMaster:
         PuzzleMaster.updateStateFromWordHints(
             puzzle_state, guessed_word, hints, index, is_horizontal
         )
-
-        print(guessed_word, hints)
 
         return hints

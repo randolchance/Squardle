@@ -478,20 +478,28 @@ async function submit() {
 
     is_submitting.value = true
 
-    const guessed_word = current_word.value
     const selected_word_index = word_index.value
 
-    const params = new URLSearchParams({
-        p: props.puzzle_number,
-        i: selected_word_index,
-        word: guessed_word,
-        m: props.mode,
+    const params = {
+        word: current_word.value,
+        word_index: selected_word_index,
+    }
+
+    const request = new Request(`http://localhost:8000/p/guess`,{
+        method: "POST",
+        body: JSON.stringify(params),
+        headers: {
+            "Content-Type": "application/json",
+            "Access-Control-Allow-Credentials": true,
+            "Access-Control-Allow-Origin": "*",
+        },
+        credentials: 'include',
     })
 
     let hints
     try {
 
-        const response = await fetch(`http://127.0.0.1:8000/guess?${params}`)
+        const response = await fetch(request)
 
         if (!response.ok) {
             throw new Error(`Response status: ${response.status}`)

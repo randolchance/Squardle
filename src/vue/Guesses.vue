@@ -49,7 +49,7 @@ defineExpose({
     <div class="guess-lists-container">
         <h2 class="guess-list-header">Guesses</h2>
         <h4 class="guesses-remaining" v-if="selected_word_index !== null">Remaining: {{ max_guesses - selectedGuessList.length }}</h4>
-        <Transition name="left-slide">
+        <Transition name="scale-in">
             <div class="guess-list" v-if="showSelectedGuessList">
                 <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :style="selectedGuessesOpacity(i)" :word="guess_data.word" :hints="guess_data.hints"/>
             </div>
@@ -90,17 +90,17 @@ defineExpose({
     justify-content: center;
 }
 
-.left-slide-enter-active {
-  transition: all 0.2s ease-out;
+.scale-in-enter-active {
+    transition: all 0.2s ease-out;
 }
 
-.left-slide-leave-active {
-  transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
+.scale-in-leave-active {
+    transition: all 0.2s cubic-bezier(1, 0.5, 0.8, 1);
 }
 
-.left-slide-enter-from,
-.left-slide-leave-to {
-  transform: scale(0);
+.scale-in-enter-from,
+.scale-in-leave-to {
+    transform: scale(0);
 }
 
 </style>

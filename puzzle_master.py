@@ -7,7 +7,6 @@ from trie import Trie
 
 
 DATABASE_PATH = "./solutions/puzzles.db"
-PUZZLE_COUNT = 81
 WORD_SIZE = 5
 
 class Hints(IntEnum):
@@ -21,7 +20,6 @@ class Hints(IntEnum):
 class Modes(IntEnum):
     HARDEST = 0,
     ALL_HINTS = 1,    # Info about which word vertical or horizontal the letter is in
-
 
 def parse_puzzle_string( puzzle_string ):
     puzzle_list = [*puzzle_string]
@@ -54,6 +52,13 @@ class PuzzleMaster:
     word_library = {
         5: "./5-word-trie.json",
     }
+
+    @staticmethod
+    def countPuzzles(word_size):
+        with sqlite3.connect( DATABASE_PATH ) as connection:
+            cursor = connection.cursor()
+            puzzle_count = cursor.execute("SELECT COUNT(*) FROM Puzzles WHERE size=(?)", (word_size,)).fetchone()[0]
+        return puzzle_count
 
     # Updates a puzzle_state in-place with letters that are correct
     @staticmethod
@@ -109,6 +114,8 @@ class PuzzleMaster:
 
         self.word_size = word_size
 
+        self.puzzle_count = PuzzleMaster.countPuzzles(word_size)
+
         self.puzzles = {}
 
     # word_index is 0 >= word_index > 2*self.word_size, such that
@@ -127,7 +134,7 @@ class PuzzleMaster:
         return word in self.words.getWords(word)
     
     def getPuzzleIndex(self, p):
-        return (p + 44) * 10 % PUZZLE_COUNT + 1
+        return (p + 44) * 10 % self.puzzle_count + 1
     
     def fetchPuzzle(self, p):
         puzzle = self.puzzles.get(p)

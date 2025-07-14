@@ -19,6 +19,11 @@ const selectedGuessList = computed(()=>{
     return guessedWords[props.selected_word_index]
 })
 
+const selectedGuessesOpacity = guess_index => {
+    const opacity = (guess_index + 1) / selectedGuessList.value.length
+    return { 'opacity': opacity }
+}
+
 const showSelectedGuessList = computed(()=>{
     return selectedGuessList.value.length > 0
 })
@@ -45,8 +50,8 @@ defineExpose({
         <h2 class="guess-list-header">Guesses</h2>
         <h4 class="guesses-remaining" v-if="selected_word_index !== null">Remaining: {{ max_guesses - selectedGuessList.length }}</h4>
         <Transition name="left-slide">
-            <div class="guess-list" v-if="showSelectedGuessList" :data-total-guesses="selectedGuessList.length">
-                <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :data-i="i" :word="guess_data.word" :hints="guess_data.hints"/>
+            <div class="guess-list" v-if="showSelectedGuessList">
+                <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :style="selectedGuessesOpacity(i)" :word="guess_data.word" :hints="guess_data.hints"/>
             </div>
         </Transition>
     </div>
@@ -75,8 +80,6 @@ defineExpose({
     display: flex;
     flex-direction: column;
     justify-content: center;
-
-    --guesses: attr(data-total-guesses type(<number>))
 }
 
 .guess-row {
@@ -85,8 +88,6 @@ defineExpose({
     display: flex;
     flex-direction: row;
     justify-content: center;
-
-    opacity: calc((attr(data-i type(<number>)) + 1) / (var(--guesses)));
 }
 
 .left-slide-enter-active {

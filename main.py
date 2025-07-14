@@ -10,6 +10,7 @@ from pydantic import BaseModel
 
 from puzzle_master import PuzzleMaster
 
+VALID_WORD_SIZES = PuzzleMaster.word_library.keys()
 
 class GuessData(BaseModel):
     word: str
@@ -75,13 +76,15 @@ async def start_puzzle(request: Request, p:int, m: int):
 
     return response
 
-@app.get("/p/test")
-async def test(request: Request):
-    puzzle_data = request.session.get('current_puzzle', {'current_puzzle': None})
+@app.get("/list/{word_size}")
+async def test(request: Request, word_size: int):
+    if not word_size in VALID_WORD_SIZES:
+        raise Exception(f"Invalid word size of {word_size}. Should be one of {VALID_WORD_SIZES}")
     
-    response = JSONResponse(status_code=status.HTTP_200_OK, content=puzzle_data)
+    puzzle_count = PuzzleMaster.countPuzzles(word_size)
+    
+    response = JSONResponse(status_code=status.HTTP_200_OK, content=puzzle_count)
     return response
-
 
 @app.post("/p/guess")
 async def guess_word(request: Request, guessData: GuessData):

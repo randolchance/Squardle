@@ -73,10 +73,4 @@ button, button:focus {
     flex-direction: row;
 }
 
-.puzzle-list-container {
-    display: flex;
-    width: 25vw;
-    height: 100%;
-}
-
 </style>

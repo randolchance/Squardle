@@ -20,8 +20,8 @@ const selectedGuessList = computed(()=>{
 })
 
 const selectedGuessesOpacity = guess_index => {
-    const opacity = (guess_index + 1) / selectedGuessList.value.length
-    return { 'opacity': opacity }
+    const max_guesses = props.max_guesses
+    return (max_guesses - (selectedGuessList.value.length - (guess_index + 1))) / max_guesses
 }
 
 const showSelectedGuessList = computed(()=>{
@@ -51,7 +51,9 @@ defineExpose({
         <h4 class="guesses-remaining" v-if="selected_word_index !== null">Remaining: {{ max_guesses - selectedGuessList.length }}</h4>
         <Transition name="scale-in">
             <div class="guess-list" v-if="showSelectedGuessList">
-                <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :style="selectedGuessesOpacity(i)" :word="guess_data.word" :hints="guess_data.hints"/>
+                <TransitionGroup name="drop-in">
+                    <Guess class="guess-row" v-for="(guess_data, i) in selectedGuessList" :key="i" :data-opacity="selectedGuessesOpacity(i)" :word="guess_data.word" :hints="guess_data.hints"/>
+                </TransitionGroup>
             </div>
         </Transition>
     </div>
@@ -88,6 +90,9 @@ defineExpose({
     display: flex;
     flex-direction: row;
     justify-content: center;
+    z-index: 0;
+    transition: opacity 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+    opacity: attr(data-opacity type(<number>));
 }
 
 .scale-in-enter-active {
@@ -101,6 +106,20 @@ defineExpose({
 .scale-in-enter-from,
 .scale-in-leave-to {
     transform: scale(0);
+}
+
+.drop-in-enter-active {
+    transition: all 0.5s ease-out;
+}
+
+.drop-in-leave-active {
+    transition: all 0.5s cubic-bezier(1, 0.5, 0.8, 1);
+}
+
+.drop-in-enter-from,
+.drop-in-leave-to {
+    transform: translateY(-100%);
+    z-index: 1;
 }
 
 </style>

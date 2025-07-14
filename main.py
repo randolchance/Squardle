@@ -41,7 +41,7 @@ app.add_middleware(
     session_cookie="Squardle",
     max_age=SESSION_EXPIRY,
     same_site="Lax",
-    path="/p",
+    path="/",
     https_only=False,
 )
 

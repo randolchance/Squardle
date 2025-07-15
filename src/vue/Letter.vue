@@ -30,7 +30,7 @@ const status = computed(() => {
 </script>
 
 <template>
-    <div class="cell-content" :class="status">
+    <div class="letter" :class="status">
         <div class="pixel-row" v-for="(row, j) in LETTERS[props.content]" :data-j="j" >
             <div class="pixel" v-for="(pixel, i) in row" :data-i="i" :class="pixel != ' ' ? 'on' : 'off'" ></div>
         </div>
@@ -39,7 +39,7 @@ const status = computed(() => {
 
 <style scoped>
 
-.cell-content {
+.letter {
 
     --cell-pixel-size: calc(var(--scale) * var(--pixel-size));
     --cell-pixel-size-x: var(--cell-pixel-size);
@@ -56,27 +56,27 @@ const status = computed(() => {
     border-color: #222222;
 }
 
-.cell-content.correct {
+.letter.correct {
     border-color: var(--correct-color);
 }
 
-.cell-content.in-word {
+.letter.in-word {
     border-color: var(--in-word-color);
 }
 
-.cell-content.in-word-horizontal {
+.letter.in-word-horizontal {
     border-color: var(--in-word-horizontal-color);
 }
 
-.cell-content.in-word-vertical {
+.letter.in-word-vertical {
     border-color: var(--in-word-vertical-color);
 }
 
-.cell-content.in-word-both {
+.letter.in-word-both {
     border-color: var(--in-word-both-color);
 }
 
-.selected .cell-content {
+.selected .letter {
     border-color: var(--selected-color);
     background-color: var(--selected-color);
 }
@@ -103,23 +103,23 @@ const status = computed(() => {
     background-color: black;
 }
 
-.cell-content.correct .pixel.off {
+.letter.correct .pixel.off {
     background-color: var(--correct-color);
 }
 
-.cell-content.in-word .pixel.off {
+.letter.in-word .pixel.off {
     background-color: var(--in-word-color);
 }
 
-.cell-content.in-word-horizontal .pixel.off {
+.letter.in-word-horizontal .pixel.off {
     background-color: var(--in-word-horizontal-color);
 }
 
-.cell-content.in-word-vertical .pixel.off {
+.letter.in-word-vertical .pixel.off {
     background-color: var(--in-word-vertical-color);
 }
 
-.cell-content.in-word-both .pixel.off {
+.letter.in-word-both .pixel.off {
     background-color: var(--in-word-both-color);
 }
 
@@ -127,11 +127,11 @@ const status = computed(() => {
     background-color: var(--selected-color);
 }
 
-.cell-content.correct .pixel.on,
-.cell-content.in-word .pixel.on,
-.cell-content.in-word-horizontal .pixel.on,
-.cell-content.in-word-vertical .pixel.on,
-.cell-content.in-word-both .pixel.on {
+.letter.correct .pixel.on,
+.letter.in-word .pixel.on,
+.letter.in-word-horizontal .pixel.on,
+.letter.in-word-vertical .pixel.on,
+.letter.in-word-both .pixel.on {
     background-color: black;
 }
 

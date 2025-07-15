@@ -1,5 +1,5 @@
 import {
-    DEFAULT_GRID_SIZE,
+    DEFAULT_WORD_SIZE,
     CHARACTER_KEYS,
     NON_CHARACTER_KEYS,
     VALID_KEYS,
@@ -12,7 +12,7 @@ import GridCell from './grid-cell';
 
 
 export default class GameGrid {
-    constructor( guessController, puzzle_number, mode=MODES.normal, size=DEFAULT_GRID_SIZE ) {
+    constructor( guessController, puzzle_number, mode=MODES.normal, size=DEFAULT_WORD_SIZE ) {
         if (typeof size !== 'number') {
             throw new Error(`size is not a number! Given: ${size}`);
         } else if (size < 0) {

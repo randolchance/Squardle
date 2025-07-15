@@ -2,14 +2,14 @@
 import { reactive, computed } from 'vue';
 import Guess from './Guess.vue';
 
-import { DEFAULT_GRID_SIZE } from '@/js/constants';
+import { DEFAULT_WORD_SIZE } from '@/js/constants';
 
 const props = defineProps({
     max_guesses: Number,
     selected_word_index: Number
 })
 
-const size = DEFAULT_GRID_SIZE
+const size = DEFAULT_WORD_SIZE
 
 const guessedWords = reactive(new Array(2*size).fill(null).map( _ => new Array() ))
 

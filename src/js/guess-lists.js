@@ -1,4 +1,4 @@
-import { DEFAULT_GRID_SIZE } from "./constants";
+import { DEFAULT_WORD_SIZE } from "./constants";
 
 
 export default class GuessLists {
@@ -8,7 +8,7 @@ export default class GuessLists {
     #horizontal;
     #vertical;
 
-    constructor( guess_qty, size=DEFAULT_GRID_SIZE ) {
+    constructor( guess_qty, size=DEFAULT_WORD_SIZE ) {
 
         this.#guess_qty = guess_qty;
 

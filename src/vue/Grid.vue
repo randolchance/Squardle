@@ -5,7 +5,6 @@ import Cell from './Cell.vue'
 import { emitPromise } from '@/js/emit-promise'
 
 import {
-    DEFAULT_GRID_SIZE,
     CHARACTER_KEYS,
     NON_CHARACTER_KEYS,
     VALID_KEYS,
@@ -17,13 +16,13 @@ import {
 const props = defineProps({
     puzzle_number: Number,
     mode: Number,
-
+    size: Number,
     disabled: Boolean,
 })
 
 const emit = defineEmits(['guess', 'change-word'])
 
-const size = DEFAULT_GRID_SIZE
+const size = props.size
 
 function makeCell( i, j ) {
     return {

@@ -1,4 +1,4 @@
-export const DEFAULT_GRID_SIZE = 5;
+export const DEFAULT_WORD_SIZE = 5;
 
 export const CHARACTER_KEYS = [...'abcdefghijklmnopqrstuvwxyz'];
 

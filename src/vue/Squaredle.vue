@@ -5,9 +5,12 @@ import Grid from "./Grid.vue"
 import Guesses from "./Guesses.vue"
 import PuzzleList from "./PuzzleList.vue"
 
+import { DEFAULT_WORD_SIZE } from "@/js/constants"
+
 const guesses = useTemplateRef('guesses')
 
 let selected_word_index = ref(null)
+
 
 function makeGuess( guess_data ) {
     guesses.value.guess( guess_data )
@@ -22,8 +25,8 @@ function changeWord( word_index ) {
 <template>
     <div class="squardle">
         <Guesses ref="guesses" :max_guesses="4" :selected_word_index="selected_word_index"/>
-        <Grid :puzzle_number="1" :mode="0" @guess="makeGuess" @change-word="changeWord"/>
-        <PuzzleList/>
+        <Grid :size="DEFAULT_WORD_SIZE" :puzzle_number="1" :mode="0" @guess="makeGuess" @change-word="changeWord"/>
+        <PuzzleList :size="DEFAULT_WORD_SIZE"/>
     </div>
 </template>
 

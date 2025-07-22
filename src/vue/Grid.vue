@@ -589,8 +589,8 @@ function getFirstCellInWord( index ) {
 function getLastCellInWord( index ) {
     if (index === null) return null
     
-    const i = index >= size ? index % size : 0
-    const j = index < size ? index : 0
+    const i = index >= size ? index % size : size - 1
+    const j = index < size ? index : size - 1
 
     return cells[j][i]
 }

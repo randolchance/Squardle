@@ -110,7 +110,7 @@ async function onKeydown( event ) {
 
     switch (true) {
         case CHARACTER_KEYS.includes(key):
-            await writeCell( key )
+            writeCell( key )
             break
         case NON_CHARACTER_KEYS.includes(key):
             switch (key) {

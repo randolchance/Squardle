@@ -58,12 +58,12 @@ const currentCell = reactive({ cell: null })
 
 const current_row_index = computed(()=>{
     const index = word_index.value
-    return index && index < size ? index : null
+    return index !== null && index < size ? index : null
 })
 
 const current_column_index = computed(()=>{
     const index = word_index.value
-    return index && index >= size ? index % size : null
+    return index !== null && index >= size ? index % size : null
 })
 
 const current_word = computed(()=>{
@@ -320,7 +320,7 @@ function* getRow({ j }) {
 
 function* getCurrentRow() {
     const j = current_row_index.value
-    if (!j) return
+    if (j === null) return
 
     for (const cell of getRow({ j })) yield cell
 }
@@ -331,7 +331,7 @@ function* getColumn({ i }) {
 
 function* getCurrentColumn() {
     const i = current_column_index.value
-    if (!i) return
+    if (i === null) return
 
     for (const cell of getColumn({ i })) yield cell
 }

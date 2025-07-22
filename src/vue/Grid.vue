@@ -1,5 +1,5 @@
 <script setup>
-import { ref, computed, reactive, watch } from 'vue'
+import { ref, computed, reactive, watchEffect } from 'vue'
 import Cell from './Cell.vue'
 
 import { emitPromise } from '@/js/emit-promise'
@@ -82,8 +82,9 @@ const disabled = computed(()=>{
     return is_submitting.value
 })
 
-watch(()=>{
-    emit('change-word', word_index)
+
+watchEffect(()=>{
+    emit('change-word', word_index.value)
 })
 
 const is_solved = computed(()=>{

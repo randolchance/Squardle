@@ -274,6 +274,10 @@ function writeCell( key ) {
 
         deselectCell()
     
+    } else {
+
+        selectNextFreeCell()
+
     }
 }
 

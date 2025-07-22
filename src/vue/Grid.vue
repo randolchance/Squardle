@@ -598,8 +598,8 @@ function getLastCellInWord( index ) {
 // TO DO: Review or rework with new functions
 const classes = computed(()=>{
     const is_horizontal = direction.value === DIRECTIONS.horizontal
-    const currentFirstCell = getFirstCellInWord( word_index )
-    const currentLastCell = getLastCellInWord( word_index )
+    const currentFirstCell = getFirstCellInWord( word_index.value )
+    const currentLastCell = getLastCellInWord( word_index.value )
     return cells.map((row)=>{
         return row.map((cell)=>{
             const { selected, i, j } = cell

@@ -24,7 +24,7 @@ const emit = defineEmits(['guess', 'change-word'])
 
 const size = props.size
 
-let word_index = null
+const word_index = ref(null)
 
 function makeCell( i, j ) {
     return {
@@ -57,11 +57,13 @@ const direction = ref(DIRECTIONS.horizontal)
 const currentCell = reactive({ cell: null })
 
 const current_row_index = computed(()=>{
-    return word_index && word_index < size ? word_index : null
+    const index = word_index.value
+    return index && index < size ? index : null
 })
 
 const current_column_index = computed(()=>{
-    return word_index && word_index >= size ? word_index % size : null
+    const index = word_index.value
+    return index && index >= size ? index % size : null
 })
 
 const current_word = computed(()=>{
@@ -82,8 +84,8 @@ const disabled = computed(()=>{
     return is_submitting.value
 })
 
-watch(()=>{
-    emit('change-word', word_index)
+watch(word_index, ()=>{
+    emit('change-word', word_index.value)
 })
 
 const is_solved = computed(()=>{
@@ -209,30 +211,30 @@ function selectWord({ i, j }) {
 
     switch (direction.value) {
         case DIRECTIONS.horizontal:
-            word_index = j
+            word_index.value = j
             break
 
         case DIRECTIONS.vertical:
-            word_index = size + i
+            word_index.value = size + i
             break
     }
 }
 
 function selectNextWord() {
 
-    word_index = (word_index + 1) % (2 * size)
+    word_index.value = (word_index.value + 1) % (2 * size)
 
 }
 
 function selectPreviousWord() {
 
-    word_index = (word_index - 1) % (2 * size)
+    word_index.value = (word_index.value - 1) % (2 * size)
 
 }
 
 function deselectWord() {
 
-    word_index = null
+    word_index.value = null
 
 }
 
@@ -380,7 +382,7 @@ function selectNextFreeCell() {
     }
 
     // If no word is selected then there is no next cell to select
-    if (word_index === null) return null
+    if (word_index.value === null) return null
 
     // If no cell is selected (but a word is) then select first free cell
     if (!currentCell.cell) {
@@ -423,7 +425,7 @@ function selectPreviousFreeCell() {
     }
 
     // If no word is selected then there is no next cell to select
-    if (word_index === null) return null
+    if (word_index.value === null) return null
 
     // If no cell is selected (but a word is) then select first free cell
     if (!currentCell.cell) {
@@ -472,7 +474,7 @@ async function submit() {
 
     const params = {
         word,
-        word_index,
+        word_index: word_index.value,
     }
 
     const request = new Request(`http://localhost:8000/p/guess`,{

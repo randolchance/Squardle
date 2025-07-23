@@ -47,6 +47,8 @@ function changeWord( word_index ) {
 
     --selected-border-style: solid;
 
+    --scale: 1;
+
 }
 
 @font-face {

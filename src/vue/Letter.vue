@@ -2,6 +2,7 @@
 import { computed } from 'vue'
 import { HINTS } from '../js/constants'
 import { LETTERS } from '../js/letters'
+import Pixel from './Pixel.vue'
 
 const props = defineProps({
     content: String,
@@ -31,8 +32,11 @@ const status = computed(() => {
 
 <template>
     <div class="letter" :class="status">
-        <div class="pixel-row" v-for="(row, j) in LETTERS[props.content]" :data-j="j" >
+        <!-- <div class="pixel-row" v-for="(row, j) in LETTERS[props.content]" :data-j="j" >
             <div class="pixel" v-for="(pixel, i) in row" :data-i="i" :class="pixel != ' ' ? 'on' : 'off'" ></div>
+        </div> -->
+        <div class="pixel-row" v-for="j in 7">
+            <Pixel class="pixelated" v-for="i in 7" :i="i-1" :j="j-1">{{ content }}</Pixel>
         </div>
     </div>
 </template>
@@ -84,6 +88,11 @@ const status = computed(() => {
 .pixel-row {
     display: flex;
     flex-direction: row;
+}
+
+.pixelated {
+    color: white;
+    background-color: transparent;
 }
 
 .pixel {

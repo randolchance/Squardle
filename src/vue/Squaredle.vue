@@ -51,7 +51,7 @@ function changeWord( word_index ) {
 
 @font-face {
     font-family: "PublicPixel";
-    src: url("/src/fonts/PublicPixel.ttf")
+    src: url("/src/fonts/PublicPixel.ttf");
 }
 
 body {

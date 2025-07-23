@@ -26,10 +26,10 @@ const letters = computed(()=>{
 </template>
 
 
-<style scoped>
+<style>
 
 .guess-letter {
-    --scale: 0.45;
+    --scale: 0.25;
 }
 
 </style>

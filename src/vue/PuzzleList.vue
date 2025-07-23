@@ -62,7 +62,7 @@ onBeforeMount(async () => {
             <TransitionGroup name="bounce-in">
                 <div class="puzzle-list-row" v-for="j in rows">
                     <div class="puzzle-list-cell" v-for="i in columns">
-                        <Letter class="puzzle-list-letter" :content="i + rows*j + 1" :hint="HINTS.unused"/>
+                        <Letter class="puzzle-list-letter" :content="(i-1) + rows*(j-1) + 1" :hint="HINTS.unused"/>
                     </div>
                 </div>
             </TransitionGroup>

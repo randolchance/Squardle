@@ -1,4 +1,4 @@
-from fastapi import FastAPI, Request, status
+from fastapi import FastAPI, Request, status, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 from fastapi.staticfiles import StaticFiles
@@ -52,7 +52,7 @@ templates = Templates(directory="dist")
 
 app.mount("/assets", StaticFiles(directory="dist/assets"), name="static")
 
-@app.get("/p")
+@app.get("/")
 async def index(request: Request):
     
     response = templates.TemplateResponse("index.html",{"request": request})
@@ -64,44 +64,66 @@ async def query_words(q: str):
     words = PuzzleMaster().words
     return words.getWords(q)
 
-@app.get("/p/{p}/start")
-async def start_puzzle(request: Request, p:int, m: int):
-    puzzle_data = PuzzleMaster.initialiseNewPuzzle(p, m)
+@app.get("/p/{word_size}/{p}/start")
+async def start_puzzle(request: Request, word_size: int, p: int, m: int):
+    current_puzzle = request.session.get(word_size)
+    current_puzzle_details = current_puzzle.get(p) if current_puzzle else None
+    current_mode = current_puzzle_details.get('m') if current_puzzle_details else m
 
-    request.session.update({'current_puzzle': puzzle_data})
-    
+    if not current_puzzle or not current_puzzle_details or current_mode != m:
+        current_puzzle = PuzzleMaster.initialiseNewPuzzle(p, m).get(word_size)
+        current_puzzle_details = current_puzzle.get(p)
+        current_mode = m
+
+    request.session.update({
+        word_size: {
+            'current_puzzle': p,
+            p: current_puzzle_details
+        }
+    })
+
     response = JSONResponse(status_code=status.HTTP_200_OK, content={
-        'current_puzzle': puzzle_data
+        'current_puzzle': current_puzzle_details.get('data')
     })
 
     return response
 
+@app.get("/reset")
+async def test(request: Request):
+    request.session.clear()
+    return JSONResponse(status_code=status.HTTP_200_OK, content="reset")
+
+
 @app.get("/list/{word_size}")
 async def test(request: Request, word_size: int):
     if not word_size in VALID_WORD_SIZES:
-        raise Exception(f"Invalid word size of {word_size}. Should be one of {VALID_WORD_SIZES}")
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid_word_size")
     
     puzzle_count = PuzzleMaster.countPuzzles(word_size)
     
-    response = JSONResponse(status_code=status.HTTP_200_OK, content=puzzle_count)
-    return response
+    return JSONResponse(status_code=status.HTTP_200_OK, content=puzzle_count)
 
-@app.post("/p/guess")
-async def guess_word(request: Request, guessData: GuessData):
+@app.post("/p/{word_size}/{p}/guess")
+async def guess_word(request: Request, word_size: int, p: int, guessData: GuessData):
     word, word_index = guessData.model_dump().values()
 
     if (not word.isascii()):
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=None)
-    
-    current_puzzle_data = request.session.get('current_puzzle')
-    if not current_puzzle_data:
-        return JSONResponse(status_code=status.HTTP_400_BAD_REQUEST, content=None)
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="invalid_word_content")
     
     # Get current state of the current_puzzle from the session
-    p = current_puzzle_data['p']
-    mode = current_puzzle_data['m']
-    word_size = current_puzzle_data['s']
-    current_puzzle_state = current_puzzle_data['data']
+    current_puzzle = request.session.get(str(word_size))
+    if not current_puzzle:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="no_puzzle_started")
+    
+    # Prevent users from guessing at a puzzle that isn't current?
+    current_p = current_puzzle.get('current_puzzle')
+    if not current_p or p != current_p:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="puzzle_mismatch")
+    
+    current_puzzle_details = current_puzzle.get(str(p))
+    
+    mode = current_puzzle_details.get('m')
+    current_puzzle_state = current_puzzle_details.get('data')
 
     puzzleMaster = PuzzleMaster(word_size)
 

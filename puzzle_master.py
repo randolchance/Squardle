@@ -99,10 +99,12 @@ class PuzzleMaster:
             mode = Modes.ALL_HINTS
         
         return {
-            'data': create_fresh_puzzle_state(word_size),
-            'p': p,
-            'm': mode,
-            's': word_size,
+            word_size: {
+                p: {
+                    'data': create_fresh_puzzle_state(word_size),
+                    'm': mode,
+                }
+            }
         }
 
     def __init__(self, word_size=WORD_SIZE):

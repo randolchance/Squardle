@@ -51,7 +51,6 @@ const positioning = computed(()=>{
     flex: 1 0 auto;
     
     position: relative;
-    color: white;
     background-color: transparent;
 
     font-size: calc( 7 * var(--cell-pixel-size-y) * var(--scale));
@@ -68,8 +67,6 @@ const positioning = computed(()=>{
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 100%;
-    height: 100%;
 
     width: 100%;
     height: 100%;

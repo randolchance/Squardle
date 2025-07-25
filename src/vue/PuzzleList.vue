@@ -1,15 +1,9 @@
 <script setup>
-import { ref, onBeforeMount, reactive } from 'vue';
+import { ref, onBeforeMount } from 'vue';
 
 import Letter from './Letter.vue';
 
 import { HINTS } from '@/js/constants';
-
-import {
-    ALL_SINGLE_CHARACTERS,
-    generate_numbers_by_digits,
-    get_largest_content
-} from "@/js/letter-dimensions"
 
 const props = defineProps({
     size: {
@@ -19,8 +13,6 @@ const props = defineProps({
 })
 
 const puzzle_count = ref(0)
-
-const largest_content = reactive({size: {w: 0, h: 0}, content: null})
 
 const columns = 9
 
@@ -38,14 +30,6 @@ onBeforeMount(async () => {
         puzzle_count.value = number_of_puzzles
 
         rows.value = Math.ceil(number_of_puzzles / columns)
-        
-        Object.assign(largest_content, get_largest_content(
-            "PublicPixel",
-            64,
-            ALL_SINGLE_CHARACTERS.concat(
-                generate_numbers_by_digits(puzzle_count.value.toString().length)
-            )
-        ))
         
     } catch (e) {
 

@@ -14,15 +14,22 @@ import {
 } from '../js/constants'
 
 const props = defineProps({
-    puzzle_number: Number,
-    mode: Number,
-    size: Number,
+    puzzle_number: {
+        type: Number,
+        required: true,
+    },
+    mode: {
+        type: Number,
+        required: true,
+    },
+    size: {
+        type: Number,
+        required: true,
+    },
     disabled: Boolean,
 })
 
 const emit = defineEmits(['guess', 'change-word'])
-
-const size = props.size
 
 const word_index = ref(null)
 
@@ -42,9 +49,9 @@ function isCellDisabled( cell, direction ) {
 
 const cells = reactive((()=>{
     const cells = []
-    for (let j = 0; j < size; j++) {
+    for (let j = 0; j < props.size; j++) {
         const row = []
-        for (let i = 0; i < size; i++) {
+        for (let i = 0; i < props.size; i++) {
             row.push( makeCell( i, j ) )
         }
         cells.push( row )
@@ -58,12 +65,12 @@ const currentCell = reactive({ cell: null })
 
 const current_row_index = computed(()=>{
     const index = word_index.value
-    return index !== null && index < size ? index : null
+    return index !== null && index < props.size ? index : null
 })
 
 const current_column_index = computed(()=>{
     const index = word_index.value
-    return index !== null && index >= size ? index % size : null
+    return index !== null && index >= props.size ? index % props.size : null
 })
 
 const current_word = computed(()=>{
@@ -202,7 +209,7 @@ function onClick({ i, j }) {
 }
 
 function selectWord({ i, j }) {
-    if (i < 0 || j < 0 || i >= size || j >= size) {
+    if (i < 0 || j < 0 || i >= props.size || j >= props.size) {
 
         deselectWord()
 
@@ -215,20 +222,20 @@ function selectWord({ i, j }) {
             break
 
         case DIRECTIONS.vertical:
-            word_index.value = size + i
+            word_index.value = props.size + i
             break
     }
 }
 
 function selectNextWord() {
 
-    word_index.value = (word_index.value + 1) % (2 * size)
+    word_index.value = (word_index.value + 1) % (2 * props.size)
 
 }
 
 function selectPreviousWord() {
 
-    word_index.value = (word_index.value - 1) % (2 * size)
+    word_index.value = (word_index.value - 1) % (2 * props.size)
 
 }
 
@@ -244,7 +251,7 @@ function selectCell( cell ) {
     if (!cell) return
 
     const { i, j } = cell
-    if (i < 0 || j < 0 || i >= size || j >= size) return
+    if (i < 0 || j < 0 || i >= props.size || j >= props.size) return
 
     if (isCellDisabled( cell, direction.value )) return
 
@@ -319,7 +326,7 @@ function getCell( i, j ) {
 }
 
 function* getRow({ j }) {
-    for (let i = 0; i < size; i++) yield cells[j][i]
+    for (let i = 0; i < props.size; i++) yield cells[j][i]
 }
 
 function* getCurrentRow() {
@@ -330,7 +337,7 @@ function* getCurrentRow() {
 }
 
 function* getColumn({ i }) {
-    for (let j = 0; j < size; j++) yield cells[j][i]
+    for (let j = 0; j < props.size; j++) yield cells[j][i]
 }
 
 function* getCurrentColumn() {
@@ -481,7 +488,7 @@ async function submit() {
         word_index: word_index.value,
     }
 
-    const request = new Request(`http://localhost:8000/p/guess`,{
+    const request = new Request(`http://localhost:8000/p/${props.size}/${props.puzzle_number}/guess`,{
         method: "POST",
         body: JSON.stringify(params),
         headers: {
@@ -584,8 +591,8 @@ function parseHints( hints ) {
 function getFirstCellInWord( index ) {
     if (index === null) return null
     
-    const i = index >= size ? index % size : 0
-    const j = index < size ? index : 0
+    const i = index >= props.size ? index % props.size : 0
+    const j = index < props.size ? index : 0
 
     return cells[j][i]
 }
@@ -593,8 +600,8 @@ function getFirstCellInWord( index ) {
 function getLastCellInWord( index ) {
     if (index === null) return null
     
-    const i = index >= size ? index % size : size - 1
-    const j = index < size ? index : size - 1
+    const i = index >= props.size ? index % props.size : props.size - 1
+    const j = index < props.size ? index : props.size - 1
 
     return cells[j][i]
 }
